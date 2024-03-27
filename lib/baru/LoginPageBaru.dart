@@ -10,6 +10,7 @@ import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class LoginPageBaru extends StatelessWidget {
@@ -336,6 +337,7 @@ class LoginPageBaru extends StatelessWidget {
                 nama: response['nama'] ?? '',
                 foto_profil: response['foto_profil'] ?? '',
                 email: response['email'] ?? '',
+                noHp: response['no_hp'] ?? '',
                 created: response['created'] ?? '',
                 kode_otp: response['kode_otp'] ??
                     '', // Pastikan urutan parameter sesuai
@@ -348,13 +350,59 @@ class LoginPageBaru extends StatelessWidget {
             builder: (context) => BerandaPageBaruBaru(),
           ),
         );
+      } else if (response['status'] == 'errorValid') {
+        
       } else {
-        print('Login failed: ${response['message']}');
+        print('Login gagal: ${response['message']}');
+        
         // Tambahkan logika penanganan jika login gagal
+        
+        
       }
     } catch (e) {
       print('Error during login: $e');
       // Tambahkan logika penanganan jika terjadi error
     }
   }
+
+  // void showErrorDialog() {
+  //   Fluttertoast.showToast(
+  //     msg: "Username atau kata sandi tidak valid",
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.CENTER,
+  //     timeInSecForIosWeb: 1,
+  //     backgroundColor: Colors.red,
+  //     textColor: Colors.white,
+  //     fontSize: 16.0,
+  //   );
+  // }
+
+// void alert(BuildContext context, String message) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text(
+//           'Salah!',
+//           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//         ),
+//         content: Text(
+//           message,
+//           style: TextStyle(fontSize: 18),
+//         ),
+//         actions: <Widget>[
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//             child: Text('OK'),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
+
+
+
 }

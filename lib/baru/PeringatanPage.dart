@@ -1,7 +1,12 @@
+import 'package:elades/baru/FormIzin.dart';
+import 'package:elades/baru/FormKematian.dart';
+import 'package:elades/baru/FormPenghasilan.dart';
+import 'package:elades/baru/FormSktm.dart';
 import 'package:flutter/material.dart';
 
 class PeringatanPage extends StatefulWidget {
-  const PeringatanPage({super.key});
+  final String kodeSurat;
+  const PeringatanPage({super.key, required this.kodeSurat});
 
   @override
   State<PeringatanPage> createState() => _PeringatanPageState();
@@ -15,7 +20,11 @@ class _PeringatanPageState extends State<PeringatanPage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Persiapkan Dokumen Anda', style: TextStyle(fontWeight: FontWeight.bold),)),
+          title: Center(
+              child: Text(
+            'Persiapkan Dokumen Anda',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
         ),
         body: Center(
           child: Column(
@@ -31,13 +40,15 @@ class _PeringatanPageState extends State<PeringatanPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   color: Color(0xff2e3654),
-                  
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       'Sebelum ke proses berikutnya, dimohon untuk menyiapkan dokumen-dokumen yang diperlukan (KTP, KK, dan dokumen pelengkap lainnya).',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                 ),
@@ -48,7 +59,37 @@ class _PeringatanPageState extends State<PeringatanPage> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      if (widget.kodeSurat == "sktm") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FormSktm(),
+                          ),
+                        );
+                      } else  if (widget.kodeSurat == "izin") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FormIzin(),
+                          ),
+                        );
+                      } else  if (widget.kodeSurat == "kematian") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FormKematian(),
+                          ),
+                        );
+                      } else  if (widget.kodeSurat == "penghasilan") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FormPenghasilan(),
+                          ),
+                        );
+                      }
+                    },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
                     child: Ink(

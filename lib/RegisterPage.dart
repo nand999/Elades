@@ -145,6 +145,27 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
+              Ink(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromRGBO(203, 164, 102, 1),
+                            Color.fromRGBO(203, 164, 102, 1),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Berikutnya",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

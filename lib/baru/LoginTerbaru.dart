@@ -7,6 +7,7 @@ import 'package:elades/baru/RegisterPageBaru.dart';
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_provider.dart';
 import 'package:animate_do/animate_do.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -298,6 +299,7 @@ void _login(BuildContext context) async {
               nama: response['nama'] ?? '',
               foto_profil: response['foto_profil'] ?? '',
               email: response['email'] ?? '',
+              noHp: response['no_hp'] ?? '',
               created: response['created'] ?? '',
               kode_otp: response['kode_otp'] ??
                   '', // Pastikan urutan parameter sesuai
@@ -310,9 +312,12 @@ void _login(BuildContext context) async {
           builder: (context) => BerandaPageBaruBaru(),
         ),
       );
+    } else if (response['status'] == 'errorValid') {
+      alert(context, "username atau sandi tidak valid");
     } else {
       print('Login failed: ${response['message']}');
-      // Tambahkan logika penanganan jika login gagal
+      
+      alert(context, "terjadi kesalahan pada jaringan");
     }
   } catch (e) {
     print('Error during login: $e');
@@ -350,4 +355,92 @@ void loginGoogle(BuildContext context) async {
     print("Error during Google sign in: $error");
     // Handle error, tampilkan pesan kesalahan atau lakukan tindakan lain sesuai kebutuhan.
   }
+}
+
+void alert(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: contentBox(context, message),
+      );
+    },
+  );
+}
+
+Widget contentBox(BuildContext context, String message) {
+  return Stack(
+    children: <Widget>[
+      Container(
+        padding: EdgeInsets.only(
+          left: 20,
+          top: 45,
+          right: 20,
+          bottom: 20,
+        ),
+        margin: EdgeInsets.only(top: 45),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(0, 10),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Gagal Login!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 15),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 22),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OKE',style: TextStyle(color:Color.fromRGBO(203, 164, 102, 1) ),),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 20,
+        right: 20,
+        child: CircleAvatar(
+          backgroundColor: Colors.redAccent,
+          radius: 30,
+          child: Icon(
+            Icons.error_outline,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
+      ),
+    ],
+  );
 }

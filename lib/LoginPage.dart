@@ -321,7 +321,9 @@ void _login(BuildContext context) async {
           builder: (context) => BerandaPageBaru(),
         ),
       );
-    } else {
+    }else if (response['status'] == 'errorValid') {
+}
+     else {
       print('Login failed: ${response['message']}');
       // Tambahkan logika penanganan jika login gagal
     }
@@ -330,6 +332,10 @@ void _login(BuildContext context) async {
     // Tambahkan logika penanganan jika terjadi error
   }
 }
+
+  void showErrorDialog() {
+
+  }
 
 
 }

@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:elades/ApiService.dart';  // Don't forget to import ApiService.dart
+import 'package:elades/ApiService.dart';
 
 class DetailBerita extends StatelessWidget {
   final int idProduk;
-  // final ApiService apiService = ApiService("http://192.168.1.16:8080/coba/mobile");
   final ApiService apiService = ApiService();
 
   DetailBerita({Key? key, required this.idProduk}) : super(key: key);
-
-  // TODO: Implement logic to fetch product details based on idProduk
-  // You can use this.idProduk to retrieve the ID of the selected product
-  // This is just a placeholder and you should replace it with actual data fetching logic
 
   Future<Map<String, dynamic>> fetchProductDetails() async {
     try {
@@ -36,104 +31,76 @@ class DetailBerita extends StatelessWidget {
             body: Center(child: Text('Error: ${snapshot.error}')),
           );
         } else {
-          // Extract product details from snapshot
           Map<String, dynamic> productDetails =
               snapshot.data as Map<String, dynamic>;
 
           return Scaffold(
             appBar: AppBar(),
-            body: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      width: double.infinity,
+                      height: 250,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
                         child: Image.network(
                           apiService.imgUrl + productDetails['foto'],
-                          width: 300,
-                          height: 300,
-                        ),
-                      ),
-                      Card(
-                        color: Color(0xff2e3654),
-                        child: Container(
-                          width: 450,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              productDetails['judul'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 15, 8, 10),
-                        child: Text(
-                          productDetails['isi'],
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Card(
-                        elevation: 20,
-                        color: Color.fromRGBO(203, 164, 102, 1),
-                        child: Container(
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            child: Text(
-                              productDetails['tanggal'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    // Positioned(
-                    //   top: -10,
-                    //   right: 0,
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(8.0),
-                    //     child: GestureDetector(
-                    //       onTap: () {
-                    //         // Handle button tap
-                    //       },
-                    //       child: Container(
-                    //         width: 70,
-                    //         height: 70,
-                    //         decoration: BoxDecoration(
-                    //           shape: BoxShape.circle,
-                    //           color: Colors.lightBlue,
-                    //         ),
-                    //         child: Icon(
-                    //           Icons.add,
-                    //           color: Colors.white,
-                    //           size: 30,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        productDetails['judul'],
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        productDetails['tanggal'],
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        productDetails['isi'],
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
+            // bottomNavigationBar: Container(
+            //   color: Color.fromRGBO(203, 164, 102, 1),
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Text(
+            //     productDetails['tanggal'],
+            //     textAlign: TextAlign.center,
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 18,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
           );
         }
       },

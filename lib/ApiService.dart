@@ -10,9 +10,10 @@ class ApiService {
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
 
-  final String baseUrl = "http://172.17.202.137:8080/elades/mobile";
-  final String imgUrl = "http://172.17.202.137:8080/elades/mobile/images/";
-  final String fotoProfilUrl = "http://172.17.202.137:8080/elades/mobile/images/profil/";
+  final String baseUrl = "http://172.16.106.221:8080/elades/mobile";
+  final String imgUrl = "http://172.16.106.221:8080/elades/mobile/images/";
+  final String fotoProfilUrl = "http://172.16.106.221:8080/elades/mobile/images/profil/";
+  final String fotoKtpUrl = "http://172.16.106.221:8080/elades/mobile/images/foto/ktp/";
 
   // ApiService(this.baseUrl);
 
@@ -612,12 +613,5 @@ Future<Map<String, dynamic>> updateFotoProfilBaru(String userId, File image) asy
     throw Exception('Error getting product details: $e');
   }
 }
-
-
-
-
-
-
-
 
 }

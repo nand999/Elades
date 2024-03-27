@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:elades/ApiService.dart';
+import 'package:elades/baru/DetailPP.dart';
+import 'package:elades/baru/EditProfilPage.dart';
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_model.dart';
 import 'package:flutter/material.dart';
@@ -193,34 +195,51 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
               margin: EdgeInsets.fromLTRB(0, 60, 0, 0),
               child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // Ganti nilai sesuai keinginan Anda
+                  GestureDetector(
+                    onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return detailPP();
+                              }));
+                    },
+                    child: Hero(
+                      tag: "PP",
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Color(0xff2e3654), // Warna hitam
+                            width: 2, // Lebar border
                           ),
-                      child: user != null && user.foto_profil != null
-                          ? Image.network(
-                              apiService.fotoProfilUrl + user.foto_profil,
-                              width: 200,
-                              height: 200,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                print('Error loading image: $error');
-                                return Image.asset(
+                        ),
+                        child: user != null && user.foto_profil != null
+                            ? ClipOval(
+                                child: Image.network(
+                                  apiService.fotoProfilUrl + user.foto_profil,
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    print('Error loading image: $error');
+                                    return Image.asset(
+                                      'assets/nullPP.jpg',
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.contain,
+                                    );
+                                  },
+                                ),
+                              )
+                            : ClipOval(
+                                child: Image.asset(
                                   'assets/nullPP.jpg',
                                   width: 200,
                                   height: 200,
-                                  fit: BoxFit.contain,
-                                );
-                              },
-                            )
-                          : Image.asset(
-                              'assets/nullPP.jpg',
-                              width: 200,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -229,7 +248,8 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.blue, // Ganti warna sesuai keinginan Anda
+                        color: Color.fromRGBO(203, 164, 102,
+                            1), // Ganti warna sesuai keinginan Anda
                       ),
                       child: IconButton(
                         icon: Icon(Icons.edit, color: Colors.white),
@@ -245,8 +265,10 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
             SizedBox(height: 20),
             // Informasi Profil
             UserInfoCard(
+              username: user!.username,
               name: user!.nama,
               email: user!.email,
+              noHp: user!.noHp,
               address: user.kode_otp.toString(),
             ),
           ],
@@ -257,14 +279,18 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
 }
 
 class UserInfoCard extends StatelessWidget {
+  final String username;
   final String name;
   final String email;
+  final String noHp;
   final String address;
 
   const UserInfoCard({
     Key? key,
+    required this.username,
     required this.name,
     required this.email,
+    required this.noHp,
     required this.address,
   }) : super(key: key);
 
@@ -272,19 +298,132 @@ class UserInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(16),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Nama: $name', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 8),
-            Text('Email: $email', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 8),
-            Text('Alamat: $address', style: TextStyle(fontSize: 16)),
-          ],
+      child: Container(
+        decoration: BoxDecoration(
+            // border: Border.all(color: Color(0xff2e3654))
+
+            ),
+        height: 250,
+        width: 300,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Userame: $username', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              Text('Nama: $name', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              Text('Email: $email', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              Text('No Hp: $noHp', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              // Text('Alamat: $address', style: TextStyle(fontSize: 16)),
+              SizedBox(
+                height: 10,
+              ),
+
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(40, 30, 40, 10),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => FormEditProfil(),
+              //         ),
+              //       );
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       primary: Color.fromRGBO(
+              //           203, 164, 102, 1), // Ganti warna sesuai keinginan
+              //     ),
+              //     child: Container(
+              //       padding: EdgeInsets.all(8.0),
+              //       child: Row(
+              //         children: [
+              //           Icon(Icons.edit, color: Colors.white),
+              //           SizedBox(width: 8.0),
+              //           Text(
+              //             "Ubah Profil",
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 15,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FormEditProfil(),
+                        ),
+                      );
+                    },
+                    splashColor: Color(0xff2e3654),
+                    hoverColor: Color(0xff2e3654),
+                    child: Ink(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromRGBO(203, 164, 102, 1),
+                            Color.fromRGBO(203, 164, 102, 1),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.edit, color: Colors.white),
+                            SizedBox(width: 5), // Sesuaikan dengan kebutuhan
+                            Text(
+                              "Edit Profil",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class CircleClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    final radius = size.width / 2;
+    path.addOval(
+        Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }

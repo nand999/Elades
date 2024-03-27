@@ -61,7 +61,8 @@ class _PengajuanPageState extends State<PengajuanPage> {
                 SliverAppBar(
                   pinned: true,
                   floating: false,
-                  backgroundColor: Color.fromRGBO(203, 164, 102, 80),
+                  // backgroundColor: Color.fromRGBO(203, 164, 102, 80),
+                  backgroundColor: Color(0xff2e3654),
                   title: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -87,6 +88,7 @@ class _PengajuanPageState extends State<PengajuanPage> {
                     ),
                   ),
                 ),
+                
                 SliverPadding(
                   padding: const EdgeInsets.all(8.0),
                   sliver: SliverGrid(

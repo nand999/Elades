@@ -162,6 +162,30 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
+              Ink(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(203, 164, 102, 1),
+                      Color.fromRGBO(203, 164, 102, 1),
+                    ],
+                  ),
+                ),
+                child: InkWell(
+                  onTap: _register,
+                  child: Center(
+                    child: Text(
+                      "Mendaftar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -178,8 +202,18 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
     String nama = NamaController.text;
 
     // Validasi form, misalnya memastikan semua field terisi dengan benar
+    if (username.isEmpty ||
+        phone.isEmpty ||
+        notelp.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty ||
+        nama.isEmpty) {
+      // Tampilkan pesan alert jika ada field yang kosong
+      alert(context, "Harap lengkapi semua data.");
+      return;
+    } 
 
-    if (password == confirmPassword) {
+    else if (password == confirmPassword) {
       try {
         Map<String, dynamic> response =
             await apiService.registerBaru(username, password, phone, nama);
@@ -201,8 +235,98 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
         // Tambahkan logika penanganan jika terjadi error
       }
     } else {
-      print('Password and confirm password do not match');
-      // Tambahkan logika penanganan jika password dan konfirmasi tidak sesuai
+      alert(context, "Sandi dan konfirmasi sandi tidak sesuai.");
     }
   }
+}
+
+void alert(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: contentBox(context, message),
+      );
+    },
+  );
+}
+
+Widget contentBox(BuildContext context, String message) {
+  return Stack(
+    children: <Widget>[
+      Container(
+        padding: EdgeInsets.only(
+          left: 20,
+          top: 45,
+          right: 20,
+          bottom: 20,
+        ),
+        margin: EdgeInsets.only(top: 45),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(0, 10),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Gagal Mendaftar!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 15),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 22),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'OKE',
+                  style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 20,
+        right: 20,
+        child: CircleAvatar(
+          backgroundColor: Colors.redAccent,
+          radius: 30,
+          child: Icon(
+            Icons.error_outline,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
+      ),
+    ],
+  );
 }

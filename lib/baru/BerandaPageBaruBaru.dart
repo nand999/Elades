@@ -1,3 +1,4 @@
+import 'package:elades/ApiService.dart';
 import 'package:elades/HomePage.dart';
 import 'package:elades/HomePageBaru.dart';
 import 'package:elades/baru/HomePageBaruBaru.dart';
@@ -5,6 +6,9 @@ import 'package:elades/baru/PengajuanPage.dart';
 import 'package:elades/baru/PengajuanSurat.dart';
 import 'package:elades/ProdukPageBaru.dart';
 import 'package:elades/baru/PeringatanPage.dart';
+import 'package:elades/baru/user_model_baru.dart';
+import 'package:elades/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'ProfilPageBaruBaru.dart';
 import 'package:elades/SettingPage.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +32,95 @@ class _BerandaPageBaruBaruState extends State<BerandaPageBaruBaru> {
 
   @override
   Widget build(BuildContext context) {
+    ApiService apiService = ApiService();
+    UserModelBaru? user = context.watch<UserProvider>().userBaru;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        // appBar: AppBar(
+        //   title: Text("Selamat Datang! " + user!.username.toString()),
+        //   leading: InkWell(
+        //     onTap: () {
+        //       setState(() {
+        //         _currentIndex = 4;
+        //       });
+        //     },
+        //     child: Container(
+        //       margin: EdgeInsets.all(8.0),
+        //       child: user != null && user!.foto_profil != null
+        //           ? ClipOval(
+        //               child: Image.network(
+        //                 apiService.fotoProfilUrl + user!.foto_profil!,
+        //                 width: 40,
+        //                 height: 40,
+        //                 fit: BoxFit.cover,
+        //                 errorBuilder: (context, error, stackTrace) {
+        //                   print('Error loading image: $error');
+        //                   return Image.asset(
+        //                     'assets/nullPP.jpg',
+        //                     width: 40,
+        //                     height: 40,
+        //                     fit: BoxFit.cover,
+        //                   );
+        //                 },
+        //               ),
+        //             )
+        //           : ClipOval(
+        //               child: Image.asset(
+        //                 'assets/nullPP.jpg',
+        //                 width: 40,
+        //                 height: 40,
+        //                 fit: BoxFit.cover,
+        //               ),
+        //             ),
+        //     ),
+        //   ),
+        // ),
+        appBar: _currentIndex == 0
+            ? AppBar(
+                backgroundColor: Color(0xff2e3654),
+                title: Text(
+                  "Selamat Datang! " + user!.username.toString(),
+                  style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                ),
+                leading: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _currentIndex = 4;
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(8.0),
+                    child: user != null && user!.foto_profil != null
+                        ? ClipOval(
+                            child: Image.network(
+                              apiService.fotoProfilUrl + user!.foto_profil!,
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                print('Error loading image: $error');
+                                return Image.asset(
+                                  'assets/nullPP.jpg',
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                          )
+                        : ClipOval(
+                            child: Image.asset(
+                              'assets/nullPP.jpg',
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                  ),
+                ),
+              )
+            : null,
         body: _children[_currentIndex], // Main content
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -128,7 +218,9 @@ class PopUpOptions {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PeringatanPage(),
+                    builder: (context) => PeringatanPage(
+                      kodeSurat: "pengantar_skck",
+                    ),
                   ),
                 );
               },
@@ -138,7 +230,14 @@ class PopUpOptions {
               title: Text('Surat Keteranan Tidak Mampu'),
               onTap: () {
                 // Handle option 2
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PeringatanPage(
+                      kodeSurat: "sktm",
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -146,23 +245,42 @@ class PopUpOptions {
               title: Text('Surat Izin'),
               onTap: () {
                 // Handle option 3
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PeringatanPage(
+                      kodeSurat: "izin",
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.abc),
               title: Text('Surat Kematian'),
               onTap: () {
-                // Handle option 3
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PeringatanPage(
+                      kodeSurat: "kematian",
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.abc),
               title: Text('Surat Keterangan Penghasilan'),
               onTap: () {
-                // Handle option 3
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PeringatanPage(
+                      kodeSurat: "penghasilan",
+                    ),
+                  ),
+                );
               },
             ),
           ],

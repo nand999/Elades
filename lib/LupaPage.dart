@@ -12,7 +12,7 @@ class LupaPage extends StatefulWidget {
 class _LupaPageState extends State<LupaPage> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  // final ApiService apiService = ApiService('http://localhost/path/to'); 
+  // final ApiService apiService = ApiService('http://localhost/path/to');
   // final ApiService apiService = ApiService('http://192.168.1.16:8080/coba/mobile'); // Sesuaikan dengan URL backend
   final ApiService apiService = ApiService();
 
@@ -60,30 +60,27 @@ class _LupaPageState extends State<LupaPage> {
                 ),
               ),
 
-              SizedBox(height: 10.0),
+              SizedBox(height: 40.0),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 40, 10),
-                child: ElevatedButton(
-                  onPressed: () {_register();},
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromRGBO(203,164,102, 1), // Ganti warna sesuai keinginan
+
+
+              Ink(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(203, 164, 102, 1),
+                      Color.fromRGBO(203, 164, 102, 1),
+                    ],
                   ),
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: 16.0),
-                        Text(
-                          "Mendaftar",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
+                ),
+                child: Center(
+                  child: Text(
+                    "Berikutnya",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -94,41 +91,41 @@ class _LupaPageState extends State<LupaPage> {
       ),
     );
   }
-void _register() async {
-  String username = usernameController.text;
-  String phone = emailController.text;
-  String notelp = telpController.text;
-  String password = passwordController.text;
-  String confirmPassword = confirmPasswordController.text;
-  String nama = NamaController.text;
 
+  void _register() async {
+    String username = usernameController.text;
+    String phone = emailController.text;
+    String notelp = telpController.text;
+    String password = passwordController.text;
+    String confirmPassword = confirmPasswordController.text;
+    String nama = NamaController.text;
 
-  // Validasi form, misalnya memastikan semua field terisi dengan benar
+    // Validasi form, misalnya memastikan semua field terisi dengan benar
 
-  if (password == confirmPassword) {
-    try {
-      Map<String, dynamic> response = await apiService.registerBaru(username, password, phone, nama);
-      
-      if (response['status'] == 'success') {
-        print('Registration successful');
-            Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
-      } else {
-        print('Registration failed: ${response['message']}');
-        // Tambahkan logika penanganan jika registrasi gagal
+    if (password == confirmPassword) {
+      try {
+        Map<String, dynamic> response =
+            await apiService.registerBaru(username, password, phone, nama);
+
+        if (response['status'] == 'success') {
+          print('Registration successful');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+          );
+        } else {
+          print('Registration failed: ${response['message']}');
+          // Tambahkan logika penanganan jika registrasi gagal
+        }
+      } catch (e) {
+        print('Error during registration: $e');
+        // Tambahkan logika penanganan jika terjadi error
       }
-    } catch (e) {
-      print('Error during registration: $e');
-      // Tambahkan logika penanganan jika terjadi error
+    } else {
+      print('Password and confirm password do not match');
+      // Tambahkan logika penanganan jika password dan konfirmasi tidak sesuai
     }
-  } else {
-    print('Password and confirm password do not match');
-    // Tambahkan logika penanganan jika password dan konfirmasi tidak sesuai
   }
-}
-
 }
