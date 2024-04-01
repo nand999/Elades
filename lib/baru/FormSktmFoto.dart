@@ -10,14 +10,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class FormIzinFoto extends StatefulWidget {
-  const FormIzinFoto({Key? key}) : super(key: key);
+class FormSktmFoto extends StatefulWidget {
+  const FormSktmFoto({Key? key}) : super(key: key);
 
   @override
-  State<FormIzinFoto> createState() => _FormIzinFotoState();
+  State<FormSktmFoto> createState() => _FormSktmFotoState();
 }
 
-class _FormIzinFotoState extends State<FormIzinFoto> {
+class _FormSktmFotoState extends State<FormSktmFoto> {
   File? _image1;
 
   final picker = ImagePicker();
@@ -94,7 +94,7 @@ class _FormIzinFotoState extends State<FormIzinFoto> {
 
                           // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
                           Map<String, dynamic> result =
-                              await ApiService().updateKtp(userId, _image1!);
+                              await ApiService().updateKkSktm(userId, _image1!);
 
                           // Lakukan penanganan hasil jika diperlukan
                           print('Update successful: $result');
@@ -179,64 +179,3 @@ class _FormIzinFotoState extends State<FormIzinFoto> {
     );
   }
 }
-
-    // Future<bool> uploadImage(File image) async {
-//     try {
-//       var request = http.MultipartRequest(
-//         'POST',
-//         Uri.parse(apiService.baseUrl + '/upload_ktp.php'),
-//       );
-
-//       request.files.add(
-//         await http.MultipartFile.fromPath(
-//           'file',
-//           image.path,
-//           filename:
-//               Uuid().v4() + ".jpg", // Generate a random filename using uuid
-//         ),
-//       );
-
-//       var response = await request.send();
-
-//       if (response.statusCode == 200) {
-//         // Gambar berhasil diunggah. Sekarang perbarui foto_profil di tabel pengguna.
-//         return true;
-//       } else {
-//         print('Failed to upload image. Server error: ${response.statusCode}');
-//         return false;
-//       }
-//     } catch (e) {
-//       print('Error uploading image: $e');
-//       return false;
-//     }
-//   }
-
-// Future<void> updateKtp(File image) async {
-//   UserModelBaru? user = context.read<UserProvider>().userBaru;
-//   if (user != null) {
-//     try {
-//       bool uploadSuccess = await uploadImage(image);
-
-//       if (uploadSuccess) {
-//         // Menghasilkan nama file
-//         String fileName = Uuid().v4() + ".jpg";
-
-//         // Memperbarui ktp dengan nama file yang dihasilkan
-//         await apiService.updateKtp(user.username!, fileName);
-
-//         print('Perbarui foto_ktp berhasil untuk ' + user.username.toString());
-//         setState(() {
-//           UserModelBaru? updatedUser = context.read<UserProvider>().userBaru;
-//           if (updatedUser != null) {
-//             context.read<UserProvider>().setUserBaru(updatedUser);
-//           }
-//         });
-//         // Melakukan tindakan tambahan jika diperlukan setelah berhasil memperbarui foto profil
-//       } else {
-//         print('Gagal memperbarui foto_ktp');
-//       }
-//     } catch (e) {
-//       print('Error updating foto_ktp: $e');
-//     }
-//   }
-// }

@@ -1,18 +1,18 @@
+import 'package:elades/baru/BerandaPageBaruBaru.dart';
 import 'package:elades/baru/FormIzin.dart';
 import 'package:elades/baru/FormKematian.dart';
 import 'package:elades/baru/FormPenghasilan.dart';
 import 'package:elades/baru/FormSktm.dart';
 import 'package:flutter/material.dart';
 
-class PeringatanPage extends StatefulWidget {
-  final String kodeSurat;
-  const PeringatanPage({super.key, required this.kodeSurat});
+class PeringatanBerhasilPage extends StatefulWidget {
+  const PeringatanBerhasilPage({super.key});
 
   @override
-  State<PeringatanPage> createState() => _PeringatanPageState();
+  State<PeringatanBerhasilPage> createState() => _PeringatanBerhasilPageState();
 }
 
-class _PeringatanPageState extends State<PeringatanPage> {
+class _PeringatanBerhasilPageState extends State<PeringatanBerhasilPage> {
   // String jenisSurat;
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class _PeringatanPageState extends State<PeringatanPage> {
         appBar: AppBar(
           title: Center(
               child: Text(
-            'Persiapkan Dokumen Anda',
+            'Pengajuan Surat Berhasil',
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
         ),
@@ -30,10 +30,10 @@ class _PeringatanPageState extends State<PeringatanPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/ktp.png', // Ganti dengan path gambar sesuai dengan struktur proyek Anda
-                width: 200,
-                height: 200,
+              Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 250,
               ),
               SizedBox(height: 20),
               Padding(
@@ -43,7 +43,7 @@ class _PeringatanPageState extends State<PeringatanPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
-                      'Sebelum ke proses berikutnya, dimohon untuk menyiapkan dokumen-dokumen yang diperlukan (KTP, KK, dan dokumen pelengkap lainnya).',
+                      'Pengajuan anda berhasil ditambahkan, silahkan cek berkala riwayat pengajuan untuk melihat status pengajuan anda.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20,
@@ -60,35 +60,12 @@ class _PeringatanPageState extends State<PeringatanPage> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      if (widget.kodeSurat == "sktm") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FormSktm(),
-                          ),
-                        );
-                      } else  if (widget.kodeSurat == "izin") {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FormIzin(),
-                          ),
-                        );
-                      } else  if (widget.kodeSurat == "kematian") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FormKematian(),
-                          ),
-                        );
-                      } else  if (widget.kodeSurat == "penghasilan") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FormPenghasilan(),
-                          ),
-                        );
-                      }
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BerandaPageBaruBaru(),
+                        ),
+                      );
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),

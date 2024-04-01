@@ -1,6 +1,11 @@
+import 'package:elades/ApiService.dart';
 import 'package:elades/baru/FormIzinFoto.dart';
+import 'package:elades/baru/LoginTerbaru.dart';
+import 'package:elades/baru/user_model_baru.dart';
+import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FormIzin extends StatefulWidget {
   const FormIzin({super.key});
@@ -8,6 +13,8 @@ class FormIzin extends StatefulWidget {
   @override
   State<FormIzin> createState() => _FormIzinState();
 }
+
+final ApiService apiService = ApiService();
 
 class _FormIzinState extends State<FormIzin> {
   TextEditingController nikController = TextEditingController();
@@ -22,6 +29,9 @@ class _FormIzinState extends State<FormIzin> {
   TextEditingController tglIzinController = TextEditingController();
   TextEditingController pekerjaanController = TextEditingController();
   TextEditingController alamatAnakController = TextEditingController();
+  TextEditingController agamaController = TextEditingController();
+  TextEditingController tempatlahirController = TextEditingController();
+  TextEditingController tgllahirController = TextEditingController();
   String _selectedGender = 'Laki-laki';
   @override
   Widget build(BuildContext context) {
@@ -71,16 +81,50 @@ class _FormIzinState extends State<FormIzin> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: TextFormField(
-                  controller: ttlController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.cake),
-                    labelText: 'Tempat Tanggal Lahir',
-                    border: OutlineInputBorder(),
+               Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 20, 5, 0),
+                      child: TextFormField(
+                        controller: tempatlahirController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.place),
+                          labelText: 'Tempat',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 20, 10, 0),
+                      child: TextFormField(
+                        onTap: () async {
+                          DateTime? pickeddate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime(2999));
+
+                          if (pickeddate != null) {
+                            setState(() {
+                              tgllahirController.text =
+                                  DateFormat('dd-MM-yyy').format(pickeddate);
+                            });
+                          }
+                        },
+                        controller: tgllahirController,
+                        keyboardType: TextInputType.datetime,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.date_range),
+                          labelText: 'Tanggal',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               Padding(
@@ -145,6 +189,18 @@ class _FormIzinState extends State<FormIzin> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
+                  controller: agamaController,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.flag),
+                    labelText: 'Agama',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                child: TextFormField(
                   controller: pekerjaanController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.work),
@@ -190,23 +246,23 @@ class _FormIzinState extends State<FormIzin> {
                 ),
               ),
 
-                Padding(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
                   onTap: () async {
-                          DateTime? pickeddate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime(2999));
+                    DateTime? pickeddate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1950),
+                        lastDate: DateTime(2999));
 
-                          if (pickeddate != null) {
-                            setState(() {
-                              tglIzinController.text =
-                                  DateFormat('dd-MM-yyy').format(pickeddate);
-                            });
-                          }
-                        },
+                    if (pickeddate != null) {
+                      setState(() {
+                        tglIzinController.text =
+                            DateFormat('dd-MM-yyy').format(pickeddate);
+                      });
+                    }
+                  },
                   controller: tglIzinController,
                   keyboardType: TextInputType.datetime,
                   decoration: InputDecoration(
@@ -224,13 +280,9 @@ class _FormIzinState extends State<FormIzin> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () { 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FormIzinFoto(),
-                          ),
-                        );
+                    onTap: () {
+                      //memanggil api kirim surat izin
+                      _kirimIzin(context);
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -263,5 +315,73 @@ class _FormIzinState extends State<FormIzin> {
         ),
       ),
     );
+  }
+
+  void _kirimIzin(BuildContext context) async {
+    UserModelBaru? user = Provider.of<UserProvider>(context, listen: false).userBaru;
+
+    String username = usernameController.text;
+    String NIK = nikController.text;
+    String Nama = namaController.text;
+    String jk = genderController.text;
+
+    String tempat = tempatlahirController.text;
+    String tglLahir = tgllahirController.text;
+
+    String kwn = wargaController.text;
+    String agm = agamaController.text;
+    String krj = pekerjaanController.text;
+    String alamat = alamatController.text;
+    String tempatKerka = tempatKerjaController.text;
+    String bagian = bagianController.text;
+    String alasan = alasanController.text;
+    String tanggal = tglIzinController.text;
+
+    // Validasi form, misalnya memastikan semua field terisi dengan benar
+
+    try {
+      Map<String, dynamic> response = await apiService.kirimSuratIzin(
+          user!.username,
+          NIK,
+          Nama,
+          jk,
+          tempat+", " + tglLahir,
+          kwn,
+          agm,
+          krj,
+          alamat,
+          tempatKerka,
+          bagian,
+          alasan,
+          tanggal);
+
+      print('Response from server: $response'); // Cetak respons ke konsol
+
+      if (response['status'] == 'success') {
+        print('sukses mengirim');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FormIzinFoto(),
+          ),
+        );
+        // Tambahkan logika navigasi atau tindakan setelah login berhasil
+
+        // Set the user data using the provider
+
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => FormIzinFoto(),
+        //   ),
+        // );
+      } else if (response['status'] == 'errorValid') {
+      } else {
+        print('Login failed: ${response['message']}');
+      }
+    } catch (e) {
+      print('Error during login: $e');
+      // Tambahkan logika penanganan jika terjadi error
+    }
   }
 }

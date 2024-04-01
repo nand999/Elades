@@ -13,8 +13,11 @@ class HomePageBaruBaru extends StatefulWidget {
   _HomePageBaruBaruState createState() => _HomePageBaruBaruState();
 }
 
+
 class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   List<Map<String, dynamic>> products = [];
+  List<Map<String, dynamic>> status = [];
+  
   ApiService apiService = ApiService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -26,12 +29,16 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   }
 
   Future<void> fetchData() async {
+    
     try {
       ApiService apiService = ApiService();
       List<Map<String, dynamic>> productList = await apiService.getBerita();
+      
+      
 
       setState(() {
         products = productList;
+        
       });
     } catch (e) {
       // Handle error
@@ -46,7 +53,6 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   @override
   Widget build(BuildContext context) {
     UserModelBaru? user = context.watch<UserProvider>().userBaru;
-
     return Scaffold(
         body: RefreshIndicator(
       key: _refreshIndicatorKey,
@@ -73,23 +79,7 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                   preferredSize: Size.fromHeight(10.0),
                 ),
               ),
-              // SliverToBoxAdapter(
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(16.0),
-              //     child: Card(
-              //       elevation: 0,
-              //       child: Center(
-              //         child: Text(
-              //           "Selamat Datang" + " " + user!.username.toString(),
-              //           style: TextStyle(
-              //             fontSize: 40,
-              //             fontWeight: FontWeight.bold,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _SliverHeaderDelegate(

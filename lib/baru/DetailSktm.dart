@@ -98,31 +98,27 @@ class DetailSktm extends StatelessWidget {
                     ],
                   ),
                 ),
-                Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Card(
-                        elevation: 20,
-                        color: Colors.blue,
-                        child: Container(
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              productDetails['nik'].toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                if (productDetails['alasan'] !=
+                    null) // Tambahkan kondisi di sini
+                  Card(
+                    elevation: 20,
+                    color: Colors.red,
+                    child: Container(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "Alasan Ditolak: " +
+                              productDetails['alasan'].toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
               ],
             ),
           );

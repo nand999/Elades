@@ -209,23 +209,24 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
         confirmPassword.isEmpty ||
         nama.isEmpty) {
       // Tampilkan pesan alert jika ada field yang kosong
-      alert(context, "Harap lengkapi semua data.");
+      alert(context, "Harap lengkapi semua data.", "gagal mendaftar!",Icons.error, Colors.red);
       return;
-    } 
-
-    else if (password == confirmPassword) {
+    } else if (password == confirmPassword) {
       try {
         Map<String, dynamic> response =
             await apiService.registerBaru(username, password, phone, nama);
 
         if (response['status'] == 'success') {
           print('Registration successful');
+          
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LoginTerbaru(),
             ),
+            
           );
+          alert(context, "Silahkan Masuk","Berhasil Mendaftar!",Icons.check, Colors.green);
         } else {
           print('Registration failed: ${response['message']}');
           // Tambahkan logika penanganan jika registrasi gagal
@@ -235,12 +236,12 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
         // Tambahkan logika penanganan jika terjadi error
       }
     } else {
-      alert(context, "Sandi dan konfirmasi sandi tidak sesuai.");
+      alert(context, "Sandi dan konfirmasi sandi tidak sesuai.", "gagal mendaftar!", Icons.error,Colors.red);
     }
   }
 }
 
-void alert(BuildContext context, String message) {
+void alert(BuildContext context, String message, String title, IconData icon, Color color) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -250,13 +251,13 @@ void alert(BuildContext context, String message) {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: contentBox(context, message),
+        child: contentBox(context, message, title, icon, color),
       );
     },
   );
 }
 
-Widget contentBox(BuildContext context, String message) {
+Widget contentBox(BuildContext context, String message, String title, IconData icon, Color color) {
   return Stack(
     children: <Widget>[
       Container(
@@ -283,7 +284,7 @@ Widget contentBox(BuildContext context, String message) {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              'Gagal Mendaftar!',
+              title,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -318,10 +319,10 @@ Widget contentBox(BuildContext context, String message) {
         left: 20,
         right: 20,
         child: CircleAvatar(
-          backgroundColor: Colors.redAccent,
+          backgroundColor: color,
           radius: 30,
           child: Icon(
-            Icons.error_outline,
+            icon,
             color: Colors.white,
             size: 40,
           ),

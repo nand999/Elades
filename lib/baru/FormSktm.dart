@@ -1,5 +1,10 @@
+import 'package:elades/baru/FormIzin.dart';
+import 'package:elades/baru/FormSktmFoto.dart';
+import 'package:elades/baru/user_model_baru.dart';
+import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FormSktm extends StatefulWidget {
   const FormSktm({super.key});
@@ -24,7 +29,8 @@ class _FormSktmState extends State<FormSktm> {
   TextEditingController tglAnakController = TextEditingController();
   TextEditingController kelaminController = TextEditingController();
   TextEditingController alamatAnakController = TextEditingController();
-  String _selectedGender ='Laki-laki';
+
+  String _selectedGender = 'Laki-laki';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,16 +95,16 @@ class _FormSktmState extends State<FormSktm> {
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 0),
                       child: TextFormField(
                         onTap: () async {
-                          DateTime? pickeddate = await showDatePicker(
+                          DateTime? pickeddateBp = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1950),
                               lastDate: DateTime(2999));
 
-                          if (pickeddate != null) {
+                          if (pickeddateBp != null) {
                             setState(() {
                               tglBapakController.text =
-                                  DateFormat('dd-MM-yyy').format(pickeddate);
+                                  DateFormat('dd-MM-yyy').format(pickeddateBp);
                             });
                           }
                         },
@@ -188,16 +194,16 @@ class _FormSktmState extends State<FormSktm> {
                       padding: const EdgeInsets.fromLTRB(5, 20, 10, 0),
                       child: TextFormField(
                         onTap: () async {
-                          DateTime? pickeddate = await showDatePicker(
+                          DateTime? pickeddateIb = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1950),
                               lastDate: DateTime(2999));
 
-                          if (pickeddate != null) {
+                          if (pickeddateIb != null) {
                             setState(() {
                               tglIbuController.text =
-                                  DateFormat('dd-MM-yyy').format(pickeddate);
+                                  DateFormat('dd-MM-yyy').format(pickeddateIb);
                             });
                           }
                         },
@@ -313,7 +319,7 @@ class _FormSktmState extends State<FormSktm> {
                 ],
               ),
 
-               Padding(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: DropdownButtonFormField<String>(
                   value: _selectedGender,
@@ -368,8 +374,8 @@ class _FormSktmState extends State<FormSktm> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-              
-   
+                      _kirimSktm(context);
+                      
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -402,5 +408,63 @@ class _FormSktmState extends State<FormSktm> {
         ),
       ),
     );
+  }
+
+  void _kirimSktm(BuildContext context) async {
+    UserModelBaru? user =
+        Provider.of<UserProvider>(context, listen: false).userBaru;
+
+    String namaBapak = bapakController.text;
+    String ttlBapak = tmpBapakController.text;
+    String kerjaBapak = kerjaBapController.text;
+    String alamatBapak = alamatBapakController.text;
+
+    String namaIbu = ibuController.text;
+    String ttlIbu = tmpIbuController.text;
+    String kerjaIbu = kerjaIbuController.text;
+    String alamatIbu = alamatIbuController.text;
+
+    String namaAnak = anakController.text;
+    String ttlAnak = tmpAnakController.text;
+    String jkAnak = _selectedGender;
+    String alamatAnak = alamatAnakController.text;
+
+    // Validasi form, misalnya memastikan semua field terisi dengan benar
+
+    try {
+      Map<String, dynamic> response = await apiService.kirimSktm(
+          user!.username,
+          namaBapak,
+          ttlBapak + ", " + tglBapakController.text,
+          kerjaBapak,
+          alamatBapak,         
+          namaIbu,
+          ttlIbu + ", " + tglIbuController.text,
+          kerjaIbu,
+          alamatIbu,
+          namaAnak,
+          ttlAnak + ", " + tglAnakController.text,
+          jkAnak,
+          alamatAnak,
+          );
+
+      print('Response from server: $response'); // Cetak respons ke konsol
+
+      if (response['status'] == 'success') {
+        print('sukses mengirim');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FormSktmFoto(),
+          ),
+        );
+      } else if (response['status'] == 'errorValid') {
+      } else {
+        print('Login failed: ${response['message']}');
+      }
+    } catch (e) {
+      print('Error during login: $e');
+      // Tambahkan logika penanganan jika terjadi error
+    }
   }
 }
