@@ -1,5 +1,4 @@
 import 'package:elades/ApiService.dart';
-import 'package:elades/LoginPage.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 
@@ -195,7 +194,7 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
 
   void _register() async {
     String username = usernameController.text;
-    String phone = emailController.text;
+    String email = emailController.text;
     String notelp = telpController.text;
     String password = passwordController.text;
     String confirmPassword = confirmPasswordController.text;
@@ -203,7 +202,7 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
 
     // Validasi form, misalnya memastikan semua field terisi dengan benar
     if (username.isEmpty ||
-        phone.isEmpty ||
+        email.isEmpty ||
         notelp.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty ||
@@ -214,7 +213,7 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
     } else if (password == confirmPassword) {
       try {
         Map<String, dynamic> response =
-            await apiService.registerBaru(username, password, phone, nama);
+            await apiService.registerBaru(username, password, email, notelp, nama);
 
         if (response['status'] == 'success') {
           print('Registration successful');

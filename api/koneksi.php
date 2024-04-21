@@ -2,7 +2,7 @@
 $host = "localhost";
 $username = "root"; 
 $password = ""; 
-$database = "elades";
+$database = "fix_elades";
 
 $koneksi = new mysqli($host, $username, $password, $database);
 

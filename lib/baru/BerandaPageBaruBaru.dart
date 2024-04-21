@@ -1,16 +1,13 @@
 import 'package:elades/ApiService.dart';
-import 'package:elades/HomePage.dart';
-import 'package:elades/HomePageBaru.dart';
+import 'package:elades/NotifPage.dart';
 import 'package:elades/baru/HomePageBaruBaru.dart';
 import 'package:elades/baru/PengajuanPage.dart';
 import 'package:elades/baru/PengajuanSurat.dart';
-import 'package:elades/ProdukPageBaru.dart';
 import 'package:elades/baru/PeringatanPage.dart';
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'ProfilPageBaruBaru.dart';
-import 'package:elades/SettingPage.dart';
 import 'package:flutter/material.dart';
 
 class BerandaPageBaruBaru extends StatefulWidget {
@@ -219,7 +216,7 @@ class PopUpOptions {
                   context,
                   MaterialPageRoute(
                     builder: (context) => PeringatanPage(
-                      kodeSurat: "pengantar_skck",
+                      kodeSurat: "skck",
                     ),
                   ),
                 );

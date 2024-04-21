@@ -1,5 +1,3 @@
-import 'package:elades/LoginPage.dart';
-import 'package:elades/baru/LoginPageBaru.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

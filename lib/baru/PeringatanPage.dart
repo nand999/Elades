@@ -2,6 +2,7 @@ import 'package:elades/baru/FormIzin.dart';
 import 'package:elades/baru/FormKematian.dart';
 import 'package:elades/baru/FormPenghasilan.dart';
 import 'package:elades/baru/FormSktm.dart';
+import 'package:elades/baru/formSkck.dart';
 import 'package:flutter/material.dart';
 
 class PeringatanPage extends StatefulWidget {
@@ -67,7 +68,14 @@ class _PeringatanPageState extends State<PeringatanPage> {
                             builder: (context) => FormSktm(),
                           ),
                         );
-                      } else  if (widget.kodeSurat == "izin") {
+                      } else  if (widget.kodeSurat == "skck") {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FormSkck(),
+                          ),
+                        );
+                      }else  if (widget.kodeSurat == "izin") {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

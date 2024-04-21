@@ -1,4 +1,4 @@
-import 'package:elades/DetailProduk.dart';
+
 import 'package:elades/baru/DetailBerita.dart';
 import 'package:elades/baru/ProfilPageBaruBaru.dart';
 import 'package:elades/baru/user_model_baru.dart';
@@ -13,11 +13,10 @@ class HomePageBaruBaru extends StatefulWidget {
   _HomePageBaruBaruState createState() => _HomePageBaruBaruState();
 }
 
-
 class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   List<Map<String, dynamic>> products = [];
-  List<Map<String, dynamic>> status = [];
-  
+  List<String> status = [];
+
   ApiService apiService = ApiService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -25,24 +24,61 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    fetchDataAndStatus();
   }
 
+  Future<void> fetchDataAndStatus() async {
+  await Future.wait([
+    fetchStatus(),
+    fetchData()
+  ]);
+}
+
   Future<void> fetchData() async {
-    
     try {
       ApiService apiService = ApiService();
       List<Map<String, dynamic>> productList = await apiService.getBerita();
-      
-      
 
       setState(() {
         products = productList;
-        
       });
     } catch (e) {
       // Handle error
       print('Failed to load data: $e');
+    }
+  }
+
+  //   Future<void> fetchStatus(String username) async {
+  //   try {
+  //     List <String> statusList = await apiService.getStatus(username);
+  //     setState(() {
+  //       status = statusList;
+  //     });
+  //   } catch (e) {
+  //     // Handle error
+  //     print('Failed to load status: $e');
+  //   }
+  // }
+
+  Future<void> fetchStatus() async {
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    if (user != null) {
+      try {
+        Map<String, dynamic> statusData =
+            await apiService.getStatusBaru(user.username);
+        setState(() {
+          status = [
+            'Surat Masuk: ${statusData['masuk_count']}',
+            'Surat Tolak: ${statusData['tolak_count']}',
+            'Surat Selesai: ${statusData['selesai_count']}',
+          ];
+          ;
+        });
+        print(status);
+      } catch (e) {
+        // Handle error
+        print('Failed to load status: $e');
+      }
     }
   }
 
@@ -53,6 +89,7 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   @override
   Widget build(BuildContext context) {
     UserModelBaru? user = context.watch<UserProvider>().userBaru;
+    // fetchStatus(user!.username);
     return Scaffold(
         body: RefreshIndicator(
       key: _refreshIndicatorKey,
@@ -79,7 +116,6 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                   preferredSize: Size.fromHeight(10.0),
                 ),
               ),
-
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _SliverHeaderDelegate(
@@ -101,21 +137,21 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildInfoColumn(Icons.hourglass_bottom_rounded,
-                                  "Surat Diproses", "00"),
+                                  "Surat Masuk", getStatusValue('Masuk')),
                               VerticalDivider(
                                 color: Colors.white,
                                 indent: 20,
                                 endIndent: 20,
                               ),
-                              _buildInfoColumn(
-                                  Icons.done, "Surat Selesai", "00"),
+                              _buildInfoColumn(Icons.done, "Surat Selesai",
+                                  getStatusValue('Selesai')),
                               VerticalDivider(
                                 color: Colors.white,
                                 indent: 20,
                                 endIndent: 20,
                               ),
-                              _buildInfoColumn(
-                                  Icons.close, "Surat Ditolak", "00"),
+                              _buildInfoColumn(Icons.close, "Surat Ditolak",
+                                  getStatusValue('Tolak')),
                             ],
                           ),
                         ),
@@ -140,25 +176,6 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                           ),
                         );
                       },
-
-                      //  Card(
-                      //   elevation: 1,
-                      //   margin: EdgeInsets.symmetric(
-                      //       vertical: 5.0, horizontal: 16.0),
-                      //   child: ListTile(
-                      //     leading: Image.network(
-                      //       apiService.imgUrl +
-                      //           product[
-                      //               'foto'], // Sesuaikan dengan nama field yang sesuai
-                      //       width: 80.0,
-                      //       height: 80.0,
-                      //       fit: BoxFit.cover,
-                      //     ),
-                      //     title: Text(product['judul']),
-                      //     subtitle: Text(product['tanggal']),
-                      //   ),
-                      // ),
-
                       child: Card(
                         margin: EdgeInsets.all(8),
                         elevation: 5,
@@ -220,6 +237,23 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
       ),
     ));
   }
+
+  String getStatusValue(String statusName) {
+    // Mencari data status dengan nama yang sesuai
+    final statusData = status.firstWhere(
+        (element) => element.contains(statusName),
+        orElse: () => ""); // Mengembalikan string kosong jika tidak ditemukan
+    if (statusData.isNotEmpty) {
+      // Memisahkan string untuk mendapatkan jumlah
+      final parts = statusData.split(':');
+      if (parts.length > 1) {
+        return parts[1]
+            .replaceAll(RegExp(r'[^\d]'), '')
+            .trim(); // Mengembalikan jumlah yang sudah dipisahkan
+      }
+    }
+    return '0'; // Mengembalikan 0 jika tidak ada atau format tidak sesuai
+  }
 }
 
 Widget _buildInfoColumn(IconData icon, String title, String value) {
@@ -237,7 +271,9 @@ Widget _buildInfoColumn(IconData icon, String title, String value) {
           Text(
             value,
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: Color.fromRGBO(203, 164, 102, 1)),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(203, 164, 102, 1)),
           ),
         ],
       ),

@@ -1,3 +1,6 @@
+import 'package:elades/ApiService.dart';
+import 'package:elades/baru/FormIzin.dart';
+import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_provider.dart';
@@ -102,7 +105,9 @@ class _FormEditProfilState extends State<FormEditProfil> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _editProfil(context);
+                    },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
                     child: Ink(
@@ -134,5 +139,45 @@ class _FormEditProfilState extends State<FormEditProfil> {
         ),
       ),
     );
+  }
+    void _editProfil(BuildContext context) async {
+      final ApiService apiService = ApiService();
+
+    UserModelBaru? user =
+        Provider.of<UserProvider>(context, listen: false).userBaru;
+
+    String usernameBaru = usernameController.text;
+    String Nama = namaController.text;
+    String no = noController.text;
+    String email = emailController.text;
+
+    // Validasi form, misalnya memastikan semua field terisi dengan benar
+
+    try {
+      Map<String, dynamic> response = await apiService.updateProfil(
+          user!.username, usernameBaru,Nama, no, email);
+
+      print('Response from server: $response'); // Cetak respons ke konsol
+
+      if (response['status'] == 'success') {
+        print('sukses mengirim');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginTerbaru(),
+          ),
+        );
+        // Tambahkan logika navigasi atau tindakan setelah login berhasil
+
+        // Set the user data using the provider
+
+      } else if (response['status'] == 'errorValid') {
+      } else {
+        print('Login failed: ${response['message']}');
+      }
+    } catch (e) {
+      print('Error during login: $e');
+      // Tambahkan logika penanganan jika terjadi error
+    }
   }
 }

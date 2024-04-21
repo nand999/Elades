@@ -8,12 +8,12 @@ class ApiService {
   // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://192.168.1.18:8080/elades/mobile";
-  final String imgUrl = "http://192.168.1.18:8080/elades/mobile/images/";
+  final String baseUrl = "http://192.168.1.12:8080/elades/mobile";
+  final String imgUrl = "http://192.168.1.12:8080/elades/mobile/images/";
   final String fotoProfilUrl =
-      "http://192.168.1.18:8080/elades/mobile/images/profil/";
+      "http://192.168.1.12:8080/elades/mobile/images/profil/";
   final String fotoKtpUrl =
-      "http://192.168.1.18:8080/elades/mobile/images/foto/ktp/";
+      "http://192.168.1.12:8080/elades/mobile/images/foto/ktp/";
 
   // ApiService(this.baseUrl);
 
@@ -54,6 +54,29 @@ class ApiService {
         body: jsonEncode(<String, String>{
           'username': username,
           'password': password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception('Login failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during login: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> hapusAkun(String username) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/delete_account.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
         }),
       );
 
@@ -297,8 +320,8 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> registerBaru(
-      String username, String password, String nomor, String nama) async {
+  Future<Map<String, dynamic>> registerBaru(String username, String password,
+      String email, String no_hp, String nama) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/register.php'),
@@ -308,7 +331,8 @@ class ApiService {
         body: jsonEncode(<String, String>{
           'username': username,
           'password': password,
-          'nomor': nomor,
+          'email': email,
+          'no_hp': no_hp,
           'nama': nama
         }),
       );
@@ -393,7 +417,7 @@ class ApiService {
     }
   }
 
-    Future<List<Map<String, dynamic>>> getStatus(String username) async {
+  Future<List<Map<String, dynamic>>> getStatus(String username) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/get_status.php'),
@@ -416,6 +440,19 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Error mengambil pengajuan: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getStatusBaru(String username) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl/get_status.php?username=$username'));
+
+    if (response.statusCode == 200) {
+      // Jika permintaan berhasil, kembalikan data dalam bentuk Map
+      return json.decode(response.body);
+    } else {
+      // Jika permintaan gagal, lemparkan sebuah exception
+      throw Exception('Failed to load status');
     }
   }
 
@@ -742,13 +779,8 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> kirimSuratMati(
-      String username,
-      String Nama,
-      String Jenis_kelamin,
-      // String Tempat_tanggal_lahir,
-      String Alamat,
-      String Tanggal) async {
+  Future<Map<String, dynamic>> kirimSuratMati(String username, String Nama,
+      String Jenis_kelamin, String Alamat, String Tanggal) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/insert_mati.php'),
@@ -759,7 +791,6 @@ class ApiService {
           'username': username,
           'nama': Nama,
           'jenis_kelamin': Jenis_kelamin,
-          // 'tempat_tanggal_lahir': Tempat_tanggal_lahir,
           'alamat': Alamat,
           'tanggal_kematian': Tanggal
         }),
@@ -777,7 +808,7 @@ class ApiService {
     }
   }
 
-      Future<bool> uploadKkSktm(File image, String fileName) async {
+  Future<bool> uploadKkSktm(File image, String fileName) async {
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -870,16 +901,14 @@ class ApiService {
           'tempat_tanggal_lahir_bapak': ttlBapak,
           'pekerjaan_bapak': kerjaBapak,
           'alamat_bapak': alamatBapak,
-
           'nama_ibu': NamaIbu,
           'tempat_tanggal_lahir_ibu': ttlIbu,
           'pekerjaan_ibu': kerjaIbu,
           'alamat_ibu': alamatIbu,
-
           'nama_anak': NamaAnak,
           'tempat_tanggal_lahir_anak': ttlAnak,
           'jenis_kelamin_anak': kelaminAnak,
-          'alamat_anak': alamatAnak,       
+          'alamat_anak': alamatAnak,
         }),
       );
 
@@ -895,6 +924,83 @@ class ApiService {
     }
   }
 
+    Future<Map<String, dynamic>> kirimSkck(
+    String username,
+    String nama,
+    String nik,
+    String ttl,
+    String kebangsaan,
+    String pekerjaan,
+    String agama,
+    String jk,
+    String statusKawin,
+    String tempatTinggal,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/insert_skck.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'nama': nama,
+          'nik': nik,
+          'ttl': ttl,
+          'kebangsaan': kebangsaan,
+          'agama': agama,
+          'pekerjaan': pekerjaan,
+          'jk': jk,
+          'statusKawin': statusKawin,
+          'tempatTinggal': tempatTinggal,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Registration failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during registration: $e');
+    }
+  }
+
+    Future<Map<String, dynamic>> updateKtpSkck(String userId, File image) async {
+    try {
+      // Ubah ini menjadi 'uploadKtp' agar sesuai dengan nama metode yang benar
+      String fileName = Uuid().v4() + ".jpg";
+      // Mengunggah gambar ke server
+      bool uploadSuccess = await uploadKtp(image, fileName);
+
+      if (uploadSuccess) {
+        final response = await http.post(
+          Uri.parse('$baseUrl/update_ktp_skck.php'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'username': userId,
+            'foto_ktp': fileName,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          return responseData;
+        } else {
+          throw Exception(
+              'Failed to update foto_profil. Server error: ${response.statusCode}');
+        }
+      } else {
+        throw Exception('Failed to upload foto_profil image.');
+      }
+    } catch (e) {
+      throw Exception('Error updating foto_profil: $e');
+    }
+  }
 
   Future<Map<String, dynamic>> updateKtpMati(String userId, File image) async {
     try {
@@ -927,6 +1033,35 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Error updating foto_profil: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> updateProfil(String usernameLama,
+      String usernameBaru, String nama, String noHp, String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/update_profil.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'usernameBaru': usernameBaru,
+          'usernameLama': usernameLama,
+          'nama': nama,
+          'no_hp': noHp,
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Registration failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during registration: $e');
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'package:elades/ApiService.dart';
-import 'package:elades/LoginPage.dart';
+import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 
 class LupaPage extends StatefulWidget {
@@ -94,7 +94,7 @@ class _LupaPageState extends State<LupaPage> {
 
   void _register() async {
     String username = usernameController.text;
-    String phone = emailController.text;
+    String email = emailController.text;
     String notelp = telpController.text;
     String password = passwordController.text;
     String confirmPassword = confirmPasswordController.text;
@@ -105,14 +105,14 @@ class _LupaPageState extends State<LupaPage> {
     if (password == confirmPassword) {
       try {
         Map<String, dynamic> response =
-            await apiService.registerBaru(username, password, phone, nama);
+            await apiService.registerBaru(username, password, email, notelp, nama);
 
         if (response['status'] == 'success') {
           print('Registration successful');
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LoginPage(),
+              builder: (context) => LoginTerbaru(),
             ),
           );
         } else {

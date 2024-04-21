@@ -1,34 +1,48 @@
 <?php
-// Di dalam get_status.php
-include 'koneksi.php';
-// Ambil data dari body request
-$data = json_decode(file_get_contents("php://input"));
-// Pastikan ada data yang dikirim
-if (isset($data->username)) {
-    $username = $data->username;
-    // Query untuk mendapatkan jumlah surat berdasarkan status
-    $query = "SELECT CONCAT(laporan.status, ' : ', COUNT(*)) AS status_jumlah
-              FROM pengajuan_surat
-              JOIN laporan ON pengajuan_surat.id = laporan.id
-              WHERE pengajuan_surat.username = '$username'
-              GROUP BY laporan.status;
-    ";
-    $result = $koneksi->query($query);
-    // Pastikan query berhasil
-    if ($result) {
-        // Ambil data status dan jumlah
-        $rows = array();
-        while ($row = $result->fetch_assoc()) {
-            $rows[] = $row['status_jumlah'];
-        }
-        // Kirim data sebagai response
-        echo json_encode($rows);
-    } else {
-        // Jika query gagal
-        echo json_encode(['error' => 'Failed to get product details.']);
-    }
-} else {
-    // Jika data tidak lengkap
-    echo json_encode(['error' => 'Incomplete data.']);
+
+// Koneksi ke database
+$koneksi = mysqli_connect("localhost", "root", "", "fix_elades");
+
+// Periksa koneksi
+if (mysqli_connect_errno()) {
+    echo "Koneksi ke database gagal: " . mysqli_connect_error();
+    exit();
 }
+
+// Ambil data username dari permintaan
+$username = $_GET['username'];
+
+// Buat query untuk menghitung jumlah status
+$query = "SELECT
+            COUNT(CASE WHEN laporan.status = 'masuk' THEN 1 END) AS masuk_count,
+            COUNT(CASE WHEN laporan.status = 'tolak' THEN 1 END) AS tolak_count,
+            COUNT(CASE WHEN laporan.status = 'selesai' THEN 1 END) AS selesai_count
+          FROM
+            pengajuan_surat
+          LEFT JOIN
+            laporan ON pengajuan_surat.id = laporan.id
+          WHERE
+            pengajuan_surat.username = '$username'";
+
+// Eksekusi query
+$result = mysqli_query($koneksi, $query);
+
+// Periksa hasil query
+if ($result) {
+    // Ambil hasil query
+    $data = mysqli_fetch_assoc($result);
+    
+    // Konversi hasil menjadi format JSON
+    $json_data = json_encode($data);
+    
+    // Tampilkan JSON
+    echo $json_data;
+} else {
+    // Jika query gagal, tampilkan pesan error
+    echo "Gagal menjalankan query: " . mysqli_error($koneksi);
+}
+
+// Tutup koneksi ke database
+mysqli_close($koneksi);
+
 ?>

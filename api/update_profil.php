@@ -6,22 +6,24 @@ include 'koneksi.php';
 $data = json_decode(file_get_contents("php://input"));
 
 // Mendapatkan nilai dari data
-$username = $data->username;
-$password = md5($data->password);
+$usernameLama = $data->usernameLama;
+$usernameBaru = $data->usernameBaru;
+$Nama = $data->nama;
+$noHp = $data->no_hp;
 $email = $data->email;
-$nama = $data->nama;
-$no_hp = $data->no_hp;
 
 // Masukkan nilai ke dalam database
-$query = "INSERT INTO akun_user (username, password, email, no_hp, nama) VALUES ('$username', '$password', '$email', '$no_hp','$nama')";
+$query = "UPDATE akun_user
+SET nama = '$Nama', no_hp = '$noHp', email = '$email', username = '$usernameBaru'
+WHERE username = '$usernameLama';";
 $result = mysqli_query($koneksi, $query);
 
 if ($result) {
     $response['status'] = 'success';
-    $response['message'] = 'User registered successfully';
+    $response['message'] = 'Berhasil menambahkan surat kematian';
 } else {
     $response['status'] = 'error';
-    $response['message'] = 'Failed to register user';
+    $response['message'] = 'gagal menambah surat kematian';
 }
 
 // Mengembalikan response ke Flutter

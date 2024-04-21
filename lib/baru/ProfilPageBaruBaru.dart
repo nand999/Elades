@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:elades/ApiService.dart';
 import 'package:elades/baru/DetailPP.dart';
 import 'package:elades/baru/EditProfilPage.dart';
+import 'package:elades/baru/FormIzin.dart';
+import 'package:elades/baru/LoginTerbaru.dart' hide apiService;
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_model.dart';
 import 'package:flutter/material.dart';
@@ -74,38 +76,6 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     }
   }
 
-  //lama
-
-  // Future<void> _changePhoto() async {
-  //   await getImage();
-  //   if (image != null) {
-  //     try {
-  //       await updateFotoProfil(image!);
-  //       setState(() {
-
-  //       });
-  //     } catch (e) {
-  //       // Tampilkan pesan kesalahan jika gagal mengupdate foto profil
-  //       showDialog(
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return AlertDialog(
-  //             title: Text('Error'),
-  //             content: Text('Failed to update foto profil.'),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: Text('Close'),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     }
-  //   }
-  // }
 
   Future<void> updateFotoProfil(File image) async {
     UserModelBaru? user = context.read<UserProvider>().userBaru;
@@ -133,24 +103,6 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     }
   }
 
-  //    lama 2
-  // Future<void> updateFotoProfil(File image) async {
-  //   UserModel? user = context.read<UserProvider>().user;
-  //   if (user != null) {
-  //     try {
-  //       bool uploadSuccess = await uploadImage(image);
-
-  //       if (uploadSuccess) {
-  //         print('Update foto_profil success '+ user.id.toString());
-  //         // Lakukan tindakan tambahan jika diperlukan setelah berhasil memperbarui foto profil
-  //       } else {
-  //         print('Failed to update foto_profil');
-  //       }
-  //     } catch (e) {
-  //       print('Error updating foto_profil: $e');
-  //     }
-  //   }
-  // }
 
   Future<bool> uploadImage(File image) async {
     try {
@@ -196,10 +148,11 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
               child: Stack(
                 children: [
                   GestureDetector(
-                    onTap: (){
-                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                                return detailPP();
-                              }));
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return detailPP();
+                      }));
                     },
                     child: Hero(
                       tag: "PP",
@@ -301,9 +254,8 @@ class UserInfoCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             // border: Border.all(color: Color(0xff2e3654))
-
             ),
-        height: 250,
+        height: 300,
         width: 300,
         child: Padding(
           padding: EdgeInsets.all(16),
@@ -323,40 +275,7 @@ class UserInfoCard extends StatelessWidget {
                 height: 10,
               ),
 
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(40, 30, 40, 10),
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => FormEditProfil(),
-              //         ),
-              //       );
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       primary: Color.fromRGBO(
-              //           203, 164, 102, 1), // Ganti warna sesuai keinginan
-              //     ),
-              //     child: Container(
-              //       padding: EdgeInsets.all(8.0),
-              //       child: Row(
-              //         children: [
-              //           Icon(Icons.edit, color: Colors.white),
-              //           SizedBox(width: 8.0),
-              //           Text(
-              //             "Ubah Profil",
-              //             style: TextStyle(
-              //               color: Colors.white,
-              //               fontWeight: FontWeight.bold,
-              //               fontSize: 15,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
+
 
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
@@ -392,6 +311,79 @@ class UserInfoCard extends StatelessWidget {
                             SizedBox(width: 5), // Sesuaikan dengan kebutuhan
                             Text(
                               "Edit Profil",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Konfirmasi"),
+                            content: Text("Yakin untuk menghapus akun Anda?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Tutup dialog
+                                },
+                                child: Text("Tidak"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  UserModelBaru? user =
+                                      context.read<UserProvider>().userBaru;
+                                  apiService.hapusAkun(user!.username);
+                                  Navigator.of(context).pop();
+                                  // Tutup dialog setelah menghapus
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginTerbaru(),
+                                    ),
+                                  );
+                                },
+                                child: Text("Ya"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    splashColor: Color(0xff2e3654),
+                    hoverColor: Color(0xff2e3654),
+                    child: Ink(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.red,
+                            Colors.redAccent,
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.delete, color: Colors.white),
+                            SizedBox(width: 5), // Sesuaikan dengan kebutuhan
+                            Text(
+                              "Hapus Akun",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

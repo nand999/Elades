@@ -2,7 +2,6 @@
 import 'package:elades/baru/DetailIzin.dart';
 import 'package:elades/baru/DetailPengajuan.dart';
 import 'package:elades/baru/DetailSkck.dart';
-import 'package:elades/DetailProduk.dart';
 import 'package:elades/baru/DetailSktm.dart';
 import 'package:elades/user_model.dart';
 import 'package:elades/baru/user_model_baru.dart';
