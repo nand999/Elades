@@ -81,7 +81,7 @@ class _FormIzinState extends State<FormIzin> {
                 ),
               ),
 
-               Row(
+              Row(
                 children: [
                   Expanded(
                     child: Padding(
@@ -318,9 +318,9 @@ class _FormIzinState extends State<FormIzin> {
   }
 
   void _kirimIzin(BuildContext context) async {
-    UserModelBaru? user = Provider.of<UserProvider>(context, listen: false).userBaru;
+    UserModelBaru? user =
+        Provider.of<UserProvider>(context, listen: false).userBaru;
 
-    String username = usernameController.text;
     String NIK = nikController.text;
     String Nama = namaController.text;
     String jk = genderController.text;
@@ -337,51 +337,64 @@ class _FormIzinState extends State<FormIzin> {
     String alasan = alasanController.text;
     String tanggal = tglIzinController.text;
 
-    // Validasi form, misalnya memastikan semua field terisi dengan benar
+    if (NIK.isEmpty ||
+        Nama.isEmpty ||
+        tempat.isEmpty ||
+        tglLahir.isEmpty ||
+        kwn.isEmpty ||
+        agm.isEmpty ||
+        krj.isEmpty ||
+        alamat.isEmpty ||
+        tempatKerka.isEmpty ||
+        bagian.isEmpty ||
+        alasan.isEmpty ||
+        tanggal.isEmpty) {
+      alert(context, "Lengkapi semua data terlebih dahulu");
+    } else {
+      try {
+        Map<String, dynamic> response = await apiService.kirimSuratIzin(
+            user!.username,
+            NIK,
+            Nama,
+            jk,
+            tempat + ", " + tglLahir,
+            kwn,
+            agm,
+            krj,
+            alamat,
+            tempatKerka,
+            bagian,
+            alasan,
+            tanggal);
 
-    try {
-      Map<String, dynamic> response = await apiService.kirimSuratIzin(
-          user!.username,
-          NIK,
-          Nama,
-          jk,
-          tempat+", " + tglLahir,
-          kwn,
-          agm,
-          krj,
-          alamat,
-          tempatKerka,
-          bagian,
-          alasan,
-          tanggal);
+        print('Response from server: $response'); // Cetak respons ke konsol
 
-      print('Response from server: $response'); // Cetak respons ke konsol
+        if (response['status'] == 'success') {
+          print('sukses mengirim');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormIzinFoto(),
+            ),
+          );
+          // Tambahkan logika navigasi atau tindakan setelah login berhasil
 
-      if (response['status'] == 'success') {
-        print('sukses mengirim');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FormIzinFoto(),
-          ),
-        );
-        // Tambahkan logika navigasi atau tindakan setelah login berhasil
+          // Set the user data using the provider
 
-        // Set the user data using the provider
-
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => FormIzinFoto(),
-        //   ),
-        // );
-      } else if (response['status'] == 'errorValid') {
-      } else {
-        print('Login failed: ${response['message']}');
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => FormIzinFoto(),
+          //   ),
+          // );
+        } else if (response['status'] == 'errorValid') {
+        } else {
+          print('Login failed: ${response['message']}');
+        }
+      } catch (e) {
+        print('Error during login: $e');
+        // Tambahkan logika penanganan jika terjadi error
       }
-    } catch (e) {
-      print('Error during login: $e');
-      // Tambahkan logika penanganan jika terjadi error
     }
   }
 }

@@ -1,5 +1,7 @@
+import 'package:elades/ApiService.dart';
 import 'package:elades/baru/FormIzin.dart';
 import 'package:elades/baru/FormSktmFoto.dart';
+import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -375,7 +377,6 @@ class _FormSktmState extends State<FormSktm> {
                   child: InkWell(
                     onTap: () {
                       _kirimSktm(context);
-                      
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -429,15 +430,27 @@ class _FormSktmState extends State<FormSktm> {
     String jkAnak = _selectedGender;
     String alamatAnak = alamatAnakController.text;
 
-    // Validasi form, misalnya memastikan semua field terisi dengan benar
-
-    try {
-      Map<String, dynamic> response = await apiService.kirimSktm(
+    if (namaBapak.isEmpty ||
+        ttlBapak.isEmpty ||
+        kerjaBapak.isEmpty ||
+        alamatBapak.isEmpty ||
+        namaIbu.isEmpty ||
+        ttlIbu.isEmpty ||
+        kerjaIbu.isEmpty ||
+        alamatIbu.isEmpty ||
+        namaAnak.isEmpty ||
+        ttlAnak.isEmpty ||
+        alamatAnak.isEmpty) {
+      alert(context, "Lengkapi data terlebih dahulu!");
+    } else {
+      try {
+        ApiService apiService = ApiService();
+        Map<String, dynamic> response = await apiService.kirimSktm(
           user!.username,
           namaBapak,
           ttlBapak + ", " + tglBapakController.text,
           kerjaBapak,
-          alamatBapak,         
+          alamatBapak,
           namaIbu,
           ttlIbu + ", " + tglIbuController.text,
           kerjaIbu,
@@ -446,25 +459,26 @@ class _FormSktmState extends State<FormSktm> {
           ttlAnak + ", " + tglAnakController.text,
           jkAnak,
           alamatAnak,
-          );
-
-      print('Response from server: $response'); // Cetak respons ke konsol
-
-      if (response['status'] == 'success') {
-        print('sukses mengirim');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FormSktmFoto(),
-          ),
         );
-      } else if (response['status'] == 'errorValid') {
-      } else {
-        print('Login failed: ${response['message']}');
+
+        print('Response from server: $response'); // Cetak respons ke konsol
+
+        if (response['status'] == 'success') {
+          print('sukses mengirim');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormSktmFoto(),
+            ),
+          );
+        } else if (response['status'] == 'errorValid') {
+        } else {
+          print('Login failed: ${response['message']}');
+        }
+      } catch (e) {
+        print('Error during login: $e');
+        // Tambahkan logika penanganan jika terjadi error
       }
-    } catch (e) {
-      print('Error during login: $e');
-      // Tambahkan logika penanganan jika terjadi error
     }
   }
 }

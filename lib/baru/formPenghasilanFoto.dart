@@ -10,14 +10,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class FormSkckFoto extends StatefulWidget {
-  const FormSkckFoto({Key? key}) : super(key: key);
+class FormPenghasilanFoto extends StatefulWidget {
+  const FormPenghasilanFoto({Key? key}) : super(key: key);
 
   @override
-  State<FormSkckFoto> createState() => _FormSktmFotoState();
+  State<FormPenghasilanFoto> createState() => _FormPenghasilanFotoState();
 }
 
-class _FormSktmFotoState extends State<FormSkckFoto> {
+class _FormPenghasilanFotoState extends State<FormPenghasilanFoto> {
   File? _image1;
 
   final picker = ImagePicker();
@@ -94,7 +94,7 @@ class _FormSktmFotoState extends State<FormSkckFoto> {
 
                           // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
                           Map<String, dynamic> result =
-                              await ApiService().updateKtpSkck(userId, _image1!);
+                              await ApiService().updateKtpPenghasilan(userId, _image1!);
 
                           // Lakukan penanganan hasil jika diperlukan
                           print('Update successful: $result');
@@ -111,7 +111,7 @@ class _FormSktmFotoState extends State<FormSkckFoto> {
                           // Tambahkan penanganan kesalahan jika diperlukan
                         }
                       } else {
-                        alert(context, "Pilih gambar terlebih dahulu!");
+                        alert(context, "Pilh foto terlebih dahulu!");
                       }
                     },
                     splashColor: Color(0xff2e3654),

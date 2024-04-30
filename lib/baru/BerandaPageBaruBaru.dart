@@ -79,6 +79,8 @@ class _BerandaPageBaruBaruState extends State<BerandaPageBaruBaru> {
                 title: Text(
                   "Selamat Datang! " + user!.username.toString(),
                   style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
                 leading: InkWell(
                   onTap: () {

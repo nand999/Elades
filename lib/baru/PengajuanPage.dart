@@ -1,6 +1,8 @@
 // Di bagian atas file, import ApiService.dart
 import 'package:elades/baru/DetailIzin.dart';
+import 'package:elades/baru/DetailKematian.dart';
 import 'package:elades/baru/DetailPengajuan.dart';
+import 'package:elades/baru/DetailPenghasilan.dart';
 import 'package:elades/baru/DetailSkck.dart';
 import 'package:elades/baru/DetailSktm.dart';
 import 'package:elades/user_model.dart';
@@ -156,6 +158,33 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                                 .toString()),
                                       ),
                                     );
+                                  } else if (product['kode_surat'] == "surat_mati") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailKematian(
+                                            idProduk: product['no_pengajuan']
+                                                .toString()),
+                                      ),
+                                    );
+                                  } else if (product['kode_surat'] == "sktm") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailSktm(
+                                            idProduk: product['no_pengajuan']
+                                                .toString()),
+                                      ),
+                                    );
+                                  } else if (product['kode_surat'] == "surat_penghasilan") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailPenghasilan(
+                                            idProduk: product['no_pengajuan']
+                                                .toString()),
+                                      ),
+                                    );
                                   } else {
                                     Navigator.push(
                                       context,
@@ -182,12 +211,13 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                               style: TextStyle(fontSize: 18.0),
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 210,
-                                          ),
+                                          // SizedBox(
+                                          //   width: 210,
+                                          // ),
+                                          Spacer(),
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(left: 10),
+                                                const EdgeInsets.only(left: 10,right: 10),
                                             child: Text(
                                               product['status'],
                                               style: TextStyle(fontSize: 18.0, color: _getStatusColor(product['status']), fontWeight: FontWeight.bold),

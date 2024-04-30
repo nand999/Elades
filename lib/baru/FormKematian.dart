@@ -191,15 +191,16 @@ class _FormKematianState extends State<FormKematian> {
     UserModelBaru? user =
         Provider.of<UserProvider>(context, listen: false).userBaru;
 
-    String NIK = nikController.text;
     String Nama = namaController.text;
-    String jk = genderController.text;
     String alamat = alamatController.text;
     String tanggal = tglIzinController.text;
 
     // Validasi form, misalnya memastikan semua field terisi dengan benar
 
-    try {
+    if(Nama.isEmpty || alamat.isEmpty || tanggal.isEmpty){
+      alert(context, "Lengkapi semua data terlebih dahulu");
+    } else{
+          try {
       Map<String, dynamic> response = await apiService.kirimSuratMati(
           user!.username, Nama, _selectedGender, alamat, tanggal);
 
@@ -224,6 +225,7 @@ class _FormKematianState extends State<FormKematian> {
     } catch (e) {
       print('Error during login: $e');
       // Tambahkan logika penanganan jika terjadi error
+    }
     }
   }
 

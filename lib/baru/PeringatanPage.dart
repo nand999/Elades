@@ -62,7 +62,7 @@ class _PeringatanPageState extends State<PeringatanPage> {
                   child: InkWell(
                     onTap: () {
                       if (widget.kodeSurat == "sktm") {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => FormSktm(),
@@ -83,14 +83,14 @@ class _PeringatanPageState extends State<PeringatanPage> {
                           ),
                         );
                       } else  if (widget.kodeSurat == "kematian") {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => FormKematian(),
                           ),
                         );
                       } else  if (widget.kodeSurat == "penghasilan") {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => FormPenghasilan(),

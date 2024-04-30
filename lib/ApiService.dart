@@ -8,12 +8,12 @@ class ApiService {
   // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://192.168.1.12:8080/elades/mobile";
-  final String imgUrl = "http://192.168.1.12:8080/elades/mobile/images/";
+  final String baseUrl = "http://172.17.202.3:8080/elades/mobile";
+  final String imgUrl = "http://172.17.202.3:8080/elades/mobile/images/";
   final String fotoProfilUrl =
-      "http://192.168.1.12:8080/elades/mobile/images/profil/";
+      "http://172.17.202.3:8080/elades/mobile/images/profil/";
   final String fotoKtpUrl =
-      "http://192.168.1.12:8080/elades/mobile/images/foto/ktp/";
+      "http://172.17.202.3:8080/elades/mobile/images/foto/ktp/";
 
   // ApiService(this.baseUrl);
 
@@ -643,10 +643,82 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getMatiDetail(String idProduk) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/get_detail_mati.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': idProduk,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get product details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting product details: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> getSktmDetail(String idProduk) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/get_detail_sktm.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': idProduk,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get product details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting product details: $e');
+    }
+  }
+
+    Future<Map<String, dynamic>> getPenghasilanDetail(String idProduk) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/get_detail_penghasilan.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': idProduk,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get product details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting product details: $e');
+    }
+  }
+
+      Future<Map<String, dynamic>> getKematianDetail(String idProduk) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/get_detail_mati.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -808,6 +880,49 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> kirimSuratPenghasilan(
+      String username,
+      String Nama,
+      String Jenis_kelamin,
+      String Alamat,
+      String nik,
+      String tempat_lahir,
+      String tanggal_lahir,
+      String pekerjaan,
+      String jumlah_penghasilan,
+      String kegunaan_surat) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/insert_penghasilan.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'nama_lengkap': Nama,
+          'nik': nik,
+          'jenis_kelamin': Jenis_kelamin,
+          'tempat_lahir': tempat_lahir,
+          'tanggal_lahir': tanggal_lahir,
+          'pekerjaan': pekerjaan,
+          'alamat': Alamat,
+          'jumlah_penghasilan': jumlah_penghasilan,
+          'kegunaan_surat': kegunaan_surat
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Registration failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during registration: $e');
+    }
+  }
+
   Future<bool> uploadKkSktm(File image, String fileName) async {
     try {
       var request = http.MultipartRequest(
@@ -924,7 +1039,7 @@ class ApiService {
     }
   }
 
-    Future<Map<String, dynamic>> kirimSkck(
+  Future<Map<String, dynamic>> kirimSkck(
     String username,
     String nama,
     String nik,
@@ -968,7 +1083,7 @@ class ApiService {
     }
   }
 
-    Future<Map<String, dynamic>> updateKtpSkck(String userId, File image) async {
+  Future<Map<String, dynamic>> updateKtpSkck(String userId, File image) async {
     try {
       // Ubah ini menjadi 'uploadKtp' agar sesuai dengan nama metode yang benar
       String fileName = Uuid().v4() + ".jpg";
@@ -1036,6 +1151,40 @@ class ApiService {
     }
   }
 
+    Future<Map<String, dynamic>> updateKtpPenghasilan(String userId, File image) async {
+    try {
+      // Ubah ini menjadi 'uploadKtp' agar sesuai dengan nama metode yang benar
+      String fileName = Uuid().v4() + ".jpg";
+      // Mengunggah gambar ke server
+      bool uploadSuccess = await uploadKtp(image, fileName);
+
+      if (uploadSuccess) {
+        final response = await http.post(
+          Uri.parse('$baseUrl/update_ktp_penghasilan.php'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'username': userId,
+            'foto_ktp': fileName,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          return responseData;
+        } else {
+          throw Exception(
+              'Failed to update foto_profil. Server error: ${response.statusCode}');
+        }
+      } else {
+        throw Exception('Failed to upload foto_profil image.');
+      }
+    } catch (e) {
+      throw Exception('Error updating foto_profil: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> updateProfil(String usernameLama,
       String usernameBaru, String nama, String noHp, String email) async {
     try {
@@ -1050,6 +1199,31 @@ class ApiService {
           'nama': nama,
           'no_hp': noHp,
           'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Registration failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during registration: $e');
+    }
+  }
+
+    Future<Map<String, dynamic>> updateSandi(String email, String sandi) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/update_sandi.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'sandi': sandi,
         }),
       );
 

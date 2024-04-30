@@ -1,5 +1,6 @@
 import 'package:elades/ApiService.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
+import 'package:elades/baru/RegisterOtp.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPageBaru extends StatefulWidget {
@@ -12,8 +13,6 @@ class RegisterPageBaru extends StatefulWidget {
 class _RegisterPageBaruState extends State<RegisterPageBaru> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  // final ApiService apiService = ApiService('http://localhost/path/to');
-  // final ApiService apiService = ApiService('http://192.168.1.16:8080/coba/mobile'); // Sesuaikan dengan URL backend
   final ApiService apiService = ApiService();
 
   TextEditingController usernameController = TextEditingController();
@@ -129,38 +128,7 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
-
-              SizedBox(height: 10.0),
-
-              Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 40, 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _register();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromRGBO(
-                        203, 164, 102, 1), // Ganti warna sesuai keinginan
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: 16.0),
-                        Text(
-                          "Mendaftar",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              SizedBox(height: 40.0),
               Ink(
                 height: 50,
                 decoration: BoxDecoration(
@@ -173,7 +141,39 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
                 child: InkWell(
-                  onTap: _register,
+                  onTap: () {
+                    if (usernameController.text.isEmpty ||
+                        emailController.text.isEmpty ||
+                        telpController.text.isEmpty ||
+                        usernameController.text.isEmpty ||
+                        passwordController.text.isEmpty ||
+                        confirmPasswordController.text.isEmpty ||
+                        NamaController.text.isEmpty) {
+                      alert(context, "Isi semua data terlebih dahulu",
+                          "Gagal mendaftar!", Icons.error, Colors.red);
+                    } else if (passwordController.text !=
+                        confirmPasswordController.text) {
+                      alert(context, "Sandi dan konfirmasi sandi tidak sesuai",
+                          "Gagal mendaftar!", Icons.error, Colors.red);
+                    } else if (passwordController.text.length < 8 ||
+                        confirmPasswordController.text.length < 8) {
+                      alert(context, "Panjang sandi minimal 8 karakter",
+                          "Gagal mendaftar!", Icons.error, Colors.red);
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterOtp(
+                            email: emailController.text,
+                            nama: NamaController.text,
+                            noTelp: telpController.text,
+                            password: passwordController.text,
+                            username: usernameController.text,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                   child: Center(
                     child: Text(
                       "Mendaftar",
@@ -208,24 +208,46 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
         confirmPassword.isEmpty ||
         nama.isEmpty) {
       // Tampilkan pesan alert jika ada field yang kosong
-      alert(context, "Harap lengkapi semua data.", "gagal mendaftar!",Icons.error, Colors.red);
+      alert(context, "Harap lengkapi semua data.", "gagal mendaftar!",
+          Icons.error, Colors.red);
       return;
     } else if (password == confirmPassword) {
       try {
-        Map<String, dynamic> response =
-            await apiService.registerBaru(username, password, email, notelp, nama);
+        Map<String, dynamic> response = await apiService.registerBaru(
+            username, password, email, notelp, nama);
 
         if (response['status'] == 'success') {
           print('Registration successful');
-          
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => LoginTerbaru(),
+          //   ),
+          // );
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => RegisterOtp(),
+          //   ),
+          // );
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LoginTerbaru(),
+              builder: (context) => RegisterOtp(
+                email: emailController.text,
+                nama: NamaController.text,
+                noTelp: telpController.text,
+                password: passwordController.text,
+                username: usernameController.text,
+              ),
             ),
-            
           );
-          alert(context, "Silahkan Masuk","Berhasil Mendaftar!",Icons.check, Colors.green);
+
+          // alert(context, "Silahkan Masuk", "Berhasil Mendaftar!", Icons.check,
+          //     Colors.green);
         } else {
           print('Registration failed: ${response['message']}');
           // Tambahkan logika penanganan jika registrasi gagal
@@ -235,12 +257,14 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
         // Tambahkan logika penanganan jika terjadi error
       }
     } else {
-      alert(context, "Sandi dan konfirmasi sandi tidak sesuai.", "gagal mendaftar!", Icons.error,Colors.red);
+      alert(context, "Sandi dan konfirmasi sandi tidak sesuai.",
+          "gagal mendaftar!", Icons.error, Colors.red);
     }
   }
 }
 
-void alert(BuildContext context, String message, String title, IconData icon, Color color) {
+void alert(BuildContext context, String message, String title, IconData icon,
+    Color color) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -256,7 +280,8 @@ void alert(BuildContext context, String message, String title, IconData icon, Co
   );
 }
 
-Widget contentBox(BuildContext context, String message, String title, IconData icon, Color color) {
+Widget contentBox(BuildContext context, String message, String title,
+    IconData icon, Color color) {
   return Stack(
     children: <Widget>[
       Container(

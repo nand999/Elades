@@ -1,4 +1,6 @@
+import 'package:elades/ApiService.dart';
 import 'package:elades/baru/FormIzin.dart';
+import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:elades/baru/formSkckFoto.dart';
 import 'package:elades/baru/user_model_baru.dart';
 import 'package:elades/user_provider.dart';
@@ -283,39 +285,50 @@ class _FormSkckState extends State<FormSkck> {
     String tempatTinggal = tempTglController.text;
     String jk = _selectedGender;
 
-    // Validasi form, misalnya memastikan semua field terisi dengan benar
-
-    try {
-      Map<String, dynamic> response = await apiService.kirimSkck(
-        user!.username,
-        nama,
-        nik,
-        tempatLahir + ", " + tglController.text,
-        kebangsaan,
-        pekerjaan,
-        agama,
-        jk,
-        statusKawin,
-        tempatTinggal,
-      );
-
-      print('Response from server: $response'); // Cetak respons ke konsol
-
-      if (response['status'] == 'success') {
-        print('sukses mengirim');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FormSkckFoto(),
-          ),
+    if (nama.isEmpty ||
+        nik.isEmpty ||
+        tempatLahir.isEmpty ||
+        tglLahir.isEmpty ||
+        statusKawin.isEmpty ||
+        agama.isEmpty ||
+        pekerjaan.isEmpty ||
+        kebangsaan.isEmpty ||
+        tempatTinggal.isEmpty) {
+      alert(context, "Lengkapi semua data terlebih dahulu!");
+    } else {
+      try {
+        ApiService apiService = ApiService();
+        Map<String, dynamic> response = await apiService.kirimSkck(
+          user!.username,
+          nama,
+          nik,
+          tempatLahir + ", " + tglController.text,
+          kebangsaan,
+          pekerjaan,
+          agama,
+          jk,
+          statusKawin,
+          tempatTinggal,
         );
-      } else if (response['status'] == 'errorValid') {
-      } else {
-        print('Login failed: ${response['message']}');
+
+        print('Response from server: $response'); // Cetak respons ke konsol
+
+        if (response['status'] == 'success') {
+          print('sukses mengirim');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormSkckFoto(),
+            ),
+          );
+        } else if (response['status'] == 'errorValid') {
+        } else {
+          print('Login failed: ${response['message']}');
+        }
+      } catch (e) {
+        print('Error during login: $e');
+        // Tambahkan logika penanganan jika terjadi error
       }
-    } catch (e) {
-      print('Error during login: $e');
-      // Tambahkan logika penanganan jika terjadi error
     }
   }
 }

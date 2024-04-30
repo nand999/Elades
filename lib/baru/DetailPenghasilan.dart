@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../ApiService.dart';
 
-class DetailSkck extends StatelessWidget {
+class DetailPenghasilan extends StatelessWidget {
   final String idProduk;
   final ApiService apiService = ApiService();
 
-  DetailSkck({Key? key, required this.idProduk}) : super(key: key);
+  DetailPenghasilan({Key? key, required this.idProduk}) : super(key: key);
 
   Future<Map<String, dynamic>> fetchProductDetails() async {
     try {
-      return await apiService.getSkckDetail(idProduk);
+      return await apiService.getPenghasilanDetail(idProduk);
     } catch (e) {
       throw Exception('Error getting product details: $e');
     }
@@ -70,31 +70,21 @@ class DetailSkck extends StatelessWidget {
                   child: ListView(
                     children: [
                       // buildDetailCard('Kode Surat', productDetails['kode_surat']),
-                      buildDetailCard('Tanggal', productDetails['tanggal']),
-                      buildDetailCard('Nama', productDetails['nama']),
+                      buildDetailCard('Nama', productDetails['nama_lengkap']),
                       buildDetailCard('NIK', productDetails['nik']),
-                      buildDetailCard('Tempat, Tanggal Lahir',
-                          productDetails['tempat_tgl_lahir']),
+                      buildDetailCard('Jenis Kelamin',
+                          productDetails['jenis_kelamin']),
+                      buildDetailCard('TTL', productDetails['tempat_lahir'] + ", " + productDetails['tanggal_lahir']),
                       buildDetailCard(
-                          'Kebangsaan', productDetails['kebangsaan']),
-                      buildDetailCard('Agama', productDetails['agama']),
+                          'Pekerjaan', productDetails['pekerjaan']),
+                      buildDetailCard('Penghasilan',
+                          productDetails['jumlah_penghasilan']),
                       buildDetailCard(
-                          'Jenis Kelamin', productDetails['jenis_kelamin']),
-                      buildDetailCard('Status Perkawinan',
-                          productDetails['status_perkawinan']),
-                      buildDetailCard('Pekerjaan', productDetails['pekerjaan']),
-                      buildDetailCard(
-                          'Tempat Tinggal', productDetails['tempat_tinggal']),
-                      if (productDetails['status'] != null)
-                        buildDetailCard(
-                            'Alasan Ditolak', productDetails['alasan'] ?? " ")
-                      // buildDetailCard('Username', productDetails['username']),
-                      // buildDetailCard('No Pengajuan', productDetails['no_pengajuan']),
+                          'Penggunaan Surat', productDetails['kegunaan_surat']),
                     ],
                   ),
                 ),
-                if (productDetails['alasan'] !=
-                    null) // Tambahkan kondisi di sini
+                if (productDetails['alasan'] != null) // Tambahkan kondisi di sini
                   Card(
                     elevation: 20,
                     color: Colors.red,
@@ -102,8 +92,9 @@ class DetailSkck extends StatelessWidget {
                       width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: Text( "Alasan Ditolak: "+
-                          productDetails['alasan'].toString(),
+                        child: Text(
+                          "Alasan Ditolak: " +
+                              productDetails['alasan'].toString(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -112,6 +103,10 @@ class DetailSkck extends StatelessWidget {
                         ),
                       ),
                     ),
+                  )
+                else
+                  Container(
+                    height: 0, // Hide the container if no reason is provided
                   ),
               ],
             ),

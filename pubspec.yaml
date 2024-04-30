@@ -38,10 +38,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   animate_do: ^3.1.2
   provider: ^6.1.1
-  http: ^0.13.3
+  http: ^1.1.0
   uuid: ^3.0.4
   google_sign_in: ^5.2.1
   intl: ^0.17.0
+  email_otp: ^2.1.2
   # fluttertoast: ^8.2.4
 
 dev_dependencies:
@@ -75,6 +76,7 @@ flutter:
     - assets/logo.png
     - assets/google.png
     - assets/ktp.png
+    - assets/centang.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

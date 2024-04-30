@@ -111,7 +111,7 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
                           // Tambahkan penanganan kesalahan jika diperlukan
                         }
                       } else {
-                        print('No image selected.');
+                        alert(context, "Pilih gambar terlebih dahulu");
                       }
                     },
                     splashColor: Color(0xff2e3654),
@@ -176,6 +176,96 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
           ),
         );
       },
+    );
+  }
+    void alert(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: contentBox(context, message),
+        );
+      },
+    );
+  }
+
+  Widget contentBox(BuildContext context, String message) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(
+            left: 20,
+            top: 45,
+            right: 20,
+            bottom: 20,
+          ),
+          margin: EdgeInsets.only(top: 45),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black,
+                offset: Offset(0, 10),
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Gagal Mengajukan Surat!',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                message,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 22),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'OKE',
+                    style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 20,
+          right: 20,
+          child: CircleAvatar(
+            backgroundColor: Colors.redAccent,
+            radius: 30,
+            child: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -138,7 +138,12 @@ class _LoginTerbaruState extends State<LoginTerbaru> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            _login(context);
+                            if (passwordController.text.length < 8){
+                              alert(context, "Panjang sandi minimal 8 karakter");
+                            } else{
+                              _login(context);
+                            }
+                            
                           },
                           splashColor: Colors.grey,
                           hoverColor: Colors.grey,
@@ -315,7 +320,7 @@ void _login(BuildContext context) async {
       alert(context, "username atau sandi tidak valid");
     } else {
       print('Login failed: ${response['message']}');
-      
+
       alert(context, "terjadi kesalahan pada jaringan");
     }
   } catch (e) {
@@ -420,7 +425,10 @@ Widget contentBox(BuildContext context, String message) {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OKE',style: TextStyle(color:Color.fromRGBO(203, 164, 102, 1) ),),
+                child: Text(
+                  'OKE',
+                  style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                ),
               ),
             ),
           ],

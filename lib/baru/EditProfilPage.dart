@@ -1,4 +1,5 @@
 import 'package:elades/ApiService.dart';
+import 'package:elades/baru/EditProfilEmail.dart';
 import 'package:elades/baru/FormIzin.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +107,20 @@ class _FormEditProfilState extends State<FormEditProfil> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      _editProfil(context);
+                      if (user!.email != emailController.text) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditProfilEmail(
+                              nama: namaController.text,
+                              username: usernameController.text,
+                              noHp: noController.text,
+                              email: emailController.text,
+                            ),
+                          ),
+                        );
+                      }else{
+                      _editProfil(context);}
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -140,8 +154,9 @@ class _FormEditProfilState extends State<FormEditProfil> {
       ),
     );
   }
-    void _editProfil(BuildContext context) async {
-      final ApiService apiService = ApiService();
+
+  void _editProfil(BuildContext context) async {
+    final ApiService apiService = ApiService();
 
     UserModelBaru? user =
         Provider.of<UserProvider>(context, listen: false).userBaru;
@@ -155,7 +170,7 @@ class _FormEditProfilState extends State<FormEditProfil> {
 
     try {
       Map<String, dynamic> response = await apiService.updateProfil(
-          user!.username, usernameBaru,Nama, no, email);
+          user!.username, usernameBaru, Nama, no, email);
 
       print('Response from server: $response'); // Cetak respons ke konsol
 
@@ -170,7 +185,6 @@ class _FormEditProfilState extends State<FormEditProfil> {
         // Tambahkan logika navigasi atau tindakan setelah login berhasil
 
         // Set the user data using the provider
-
       } else if (response['status'] == 'errorValid') {
       } else {
         print('Login failed: ${response['message']}');

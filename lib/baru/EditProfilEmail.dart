@@ -1,17 +1,20 @@
 import 'package:elades/ApiService.dart';
-import 'package:elades/LupaPageSandi.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
+import 'package:elades/baru/user_model_baru.dart';
+import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:provider/provider.dart';
 
-class LupaPage extends StatefulWidget {
-  const LupaPage({Key? key}) : super(key: key);
+class EditProfilEmail extends StatefulWidget {
+  final String username, nama, noHp, email;
+  const EditProfilEmail({Key? key, required this.email, required this.nama, required this.noHp, required this.username,}) : super(key: key);
 
   @override
-  State<LupaPage> createState() => _LupaPageState();
+  State<EditProfilEmail> createState() => _EditProfilEmailState();
 }
 
-class _LupaPageState extends State<LupaPage> {
+class _EditProfilEmailState extends State<EditProfilEmail> {
   // final ApiService apiService = ApiService('http://localhost/path/to');
   // final ApiService apiService = ApiService('http://192.168.1.16:8080/coba/mobile'); // Sesuaikan dengan URL backend
   final ApiService apiService = ApiService();
@@ -39,7 +42,7 @@ class _LupaPageState extends State<LupaPage> {
                   controller: emailController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
-                    labelText: 'Email',
+                    labelText: 'Masukkan Email Baru',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -120,14 +123,7 @@ class _LupaPageState extends State<LupaPage> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("OTP berhasil diverifikasi"),
                       ));
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LupaPageSandi(
-                            email: emailController.text,
-                          ),
-                        ),
-                      );
+                      _editProfil(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("OTP tidak valid"),
@@ -150,5 +146,44 @@ class _LupaPageState extends State<LupaPage> {
         ),
       ),
     );
+  }
+    void _editProfil(BuildContext context) async {
+    final ApiService apiService = ApiService();
+
+    UserModelBaru? user =
+        Provider.of<UserProvider>(context, listen: false).userBaru;
+
+    String usernameBaru = widget.username;
+    String Nama = widget.nama;
+    String no = widget.noHp;
+    String email = widget.email;
+
+    // Validasi form, misalnya memastikan semua field terisi dengan benar
+
+    try {
+      Map<String, dynamic> response = await apiService.updateProfil(
+          user!.username, usernameBaru, Nama, no, email);
+
+      print('Response from server: $response'); // Cetak respons ke konsol
+
+      if (response['status'] == 'success') {
+        print('sukses mengirim');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginTerbaru(),
+          ),
+        );
+        // Tambahkan logika navigasi atau tindakan setelah login berhasil
+
+        // Set the user data using the provider
+      } else if (response['status'] == 'errorValid') {
+      } else {
+        print('Login failed: ${response['message']}');
+      }
+    } catch (e) {
+      print('Error during login: $e');
+      // Tambahkan logika penanganan jika terjadi error
+    }
   }
 }

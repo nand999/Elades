@@ -76,7 +76,6 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     }
   }
 
-
   Future<void> updateFotoProfil(File image) async {
     UserModelBaru? user = context.read<UserProvider>().userBaru;
     if (user != null) {
@@ -102,7 +101,6 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
       }
     }
   }
-
 
   Future<bool> uploadImage(File image) async {
     try {
@@ -255,7 +253,7 @@ class UserInfoCard extends StatelessWidget {
         decoration: BoxDecoration(
             // border: Border.all(color: Color(0xff2e3654))
             ),
-        height: 300,
+        height: 400,
         width: 300,
         child: Padding(
           padding: EdgeInsets.all(16),
@@ -274,8 +272,6 @@ class UserInfoCard extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-
-
 
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
@@ -396,6 +392,63 @@ class UserInfoCard extends StatelessWidget {
                   ),
                 ),
               ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 162,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginTerbaru(),
+                            ),
+                          );
+                        },
+                        splashColor: Color(0xff2e3654),
+                        hoverColor: Color(0xff2e3654),
+                        child: Ink(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.red,
+                                Colors.red,
+                              ],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.logout, color: Colors.white),
+                                  SizedBox(
+                                      width: 5), // Sesuaikan dengan kebutuhan
+                                  Text(
+                                    "Keluar",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

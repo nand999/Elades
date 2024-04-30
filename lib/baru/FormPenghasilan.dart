@@ -1,5 +1,11 @@
+import 'package:elades/ApiService.dart';
+import 'package:elades/baru/LoginTerbaru.dart';
+import 'package:elades/baru/formPenghasilanFoto.dart';
+import 'package:elades/baru/user_model_baru.dart';
+import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FormPenghasilan extends StatefulWidget {
   const FormPenghasilan({super.key});
@@ -15,10 +21,6 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
   TextEditingController tanggalLahirController = TextEditingController();
   TextEditingController alamatController = TextEditingController();
   TextEditingController genderController = TextEditingController();
-  TextEditingController wargaController = TextEditingController();
-  TextEditingController tempatKerjaController = TextEditingController();
-  TextEditingController bagianController = TextEditingController();
-  TextEditingController alasanController = TextEditingController();
   TextEditingController perluController = TextEditingController();
   TextEditingController pekerjaanController = TextEditingController();
   TextEditingController penghasilanController = TextEditingController();
@@ -29,7 +31,7 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Form Surat Izin'),
+        title: Text('Form Surat Penghasilan'),
         backgroundColor: Color.fromRGBO(203, 164, 102, 1),
       ),
       body: SingleChildScrollView(
@@ -189,6 +191,7 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   controller: penghasilanController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.money),
@@ -213,15 +216,13 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
 
               SizedBox(height: 30.0),
 
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-              
-   
+                      _kirimPenghasilan(context);
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -254,5 +255,73 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
         ),
       ),
     );
+  }
+
+  void _kirimPenghasilan(BuildContext context) async {
+    UserModelBaru? user =
+        Provider.of<UserProvider>(context, listen: false).userBaru;
+    ApiService apiService = new ApiService();
+
+    String NIK = nikController.text;
+    String Nama = namaController.text;
+    String tempat = tempatLahirController.text;
+    String tglLahir = tanggalLahirController.text;
+    String krj = pekerjaanController.text;
+    String alamat = alamatController.text;
+    String jumlah = penghasilanController.text;
+    String kegunaan = perluController.text;
+
+    if (NIK.isEmpty ||
+        Nama.isEmpty ||
+        tempat.isEmpty ||
+        tglLahir.isEmpty ||
+        krj.isEmpty ||
+        alamat.isEmpty ||
+        jumlah.isEmpty ||
+        kegunaan.isEmpty) {
+      alert(context, "Lengkapi semua data terlebih dahulu");
+    } else {
+      try {
+        Map<String, dynamic> response = await apiService.kirimSuratPenghasilan(
+            user!.username,
+            Nama,
+            _selectedGender,
+            alamat,
+            NIK,
+            tempat,
+            tglLahir,
+            krj,
+            jumlah,
+            kegunaan);
+
+        print('Response from server: $response'); // Cetak respons ke konsol
+
+        if (response['status'] == 'success') {
+          print('sukses mengirim');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormPenghasilanFoto(),
+            ),
+          );
+          // Tambahkan logika navigasi atau tindakan setelah login berhasil
+
+          // Set the user data using the provider
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => FormIzinFoto(),
+          //   ),
+          // );
+        } else if (response['status'] == 'errorValid') {
+        } else {
+          print('Login failed: ${response['message']}');
+        }
+      } catch (e) {
+        print('Error during login: $e');
+        // Tambahkan logika penanganan jika terjadi error
+      }
+    }
   }
 }
