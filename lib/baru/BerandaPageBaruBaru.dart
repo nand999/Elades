@@ -1,5 +1,6 @@
 import 'package:elades/ApiService.dart';
 import 'package:elades/NotifPage.dart';
+import 'package:elades/NotifPage2.dart';
 import 'package:elades/baru/HomePageBaruBaru.dart';
 import 'package:elades/baru/PengajuanPage.dart';
 import 'package:elades/baru/PengajuanSurat.dart';
@@ -23,7 +24,8 @@ class _BerandaPageBaruBaruState extends State<BerandaPageBaruBaru> {
     HomePageBaruBaru(),
     PengajuanPage(),
     PengajuanSurat(),
-    SettingPage(),
+    // SettingPage(),
+    NotifPage2(),
     ProfilPageBaruBaru(),
   ];
 

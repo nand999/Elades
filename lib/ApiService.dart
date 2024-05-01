@@ -8,12 +8,12 @@ class ApiService {
   // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://172.17.202.3:8080/elades/mobile";
-  final String imgUrl = "http://172.17.202.3:8080/elades/mobile/images/";
+  final String baseUrl = "http://192.168.1.19:8080/elades/mobile";
+  final String imgUrl = "http://192.168.1.19:8080/elades/mobile/images/";
   final String fotoProfilUrl =
-      "http://172.17.202.3:8080/elades/mobile/images/profil/";
+      "http://192.168.1.19:8080/elades/mobile/images/profil/";
   final String fotoKtpUrl =
-      "http://172.17.202.3:8080/elades/mobile/images/foto/ktp/";
+      "http://192.168.1.19:8080/elades/mobile/images/foto/ktp/";
 
   // ApiService(this.baseUrl);
 
