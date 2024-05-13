@@ -32,7 +32,7 @@ class _FormKematianState extends State<FormKematian> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Form Surat Izin'),
+        title: Text('Form Surat Kematian'),
         backgroundColor: Color.fromRGBO(203, 164, 102, 1),
       ),
       body: SingleChildScrollView(
@@ -47,7 +47,7 @@ class _FormKematianState extends State<FormKematian> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 20, 0),
                 child: Center(
                     child: Text(
-                  'Data Yang Bersangkutan:',
+                  'Data Almarhum/Almarhumah:',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 )),
               ),
@@ -208,7 +208,7 @@ class _FormKematianState extends State<FormKematian> {
 
       if (response['status'] == 'success') {
         print('sukses mengirim');
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => FormKematianFoto(),

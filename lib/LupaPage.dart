@@ -91,6 +91,7 @@ class _LupaPageState extends State<LupaPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   controller: otpController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.numbers),

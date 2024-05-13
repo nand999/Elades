@@ -20,4 +20,11 @@ class UserProvider extends ChangeNotifier {
     _userBaru = userBaru;
     notifyListeners();
   }
+
+    void updateUserFotoProfil(String newFotoProfil) {
+    if (_userBaru != null) {
+      _userBaru!.foto_profil = newFotoProfil;
+      notifyListeners(); // Notifikasi semua listener bahwa data telah berubah
+    }
+  }
 }

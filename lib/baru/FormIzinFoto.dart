@@ -40,6 +40,10 @@ class _FormIzinFotoState extends State<FormIzinFoto> {
   Widget build(BuildContext context) {
     UserModelBaru? user = context.read<UserProvider>().userBaru;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Unggah foto KTP anda", style: TextStyle(color: Colors.white),),
+        backgroundColor: Color(0xff2e3654),
+      ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30, 50, 30, 30),
         child: Center(

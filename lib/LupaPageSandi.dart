@@ -23,7 +23,7 @@ class _LupaPageSandiState extends State<LupaPageSandi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mendaftar'),
+        title: Text('Reset sandi'),
       ),
       body: SingleChildScrollView(
         child: Padding(

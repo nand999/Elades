@@ -106,21 +106,42 @@ class _FormEditProfilState extends State<FormEditProfil> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {
-                      if (user!.email != emailController.text) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditProfilEmail(
-                              nama: namaController.text,
-                              username: usernameController.text,
-                              noHp: noController.text,
-                              email: emailController.text,
-                            ),
-                          ),
-                        );
-                      }else{
-                      _editProfil(context);}
+                    onTap: () async {
+                      try {
+                        // Pengecekan apakah email baru tidak sama dengan email yang sudah ada
+                        if (user!.email != emailController.text) {
+                          ApiService apiService = ApiService();
+                          // Pengecekan apakah email baru sudah terdaftar
+                          Map<String, dynamic> emailResult =
+                              await apiService.cekEmail(emailController.text);
+
+                          if (emailResult['status'] == 'available') {
+                            // Jika email tersedia
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditProfilEmail(
+                                  nama: namaController.text,
+                                  username: usernameController.text,
+                                  noHp: noController.text,
+                                  email: emailController.text,
+                                ),
+                              ),
+                            );
+                          } else {
+                            // Jika email sudah terdaftar
+                            // Tampilkan pesan bahwa email sudah terdaftar
+                            alert(context, "Email sudah terdaftar");
+                          }
+                        } else {
+                          // Jika email baru sama dengan email yang sudah ada
+                          _editProfil(context);
+                        }
+                      } catch (e) {
+                        print('Error during email validation: $e');
+                        // Tambahkan penanganan error jika terjadi masalah saat memeriksa email
+                        alert(context, "Gagal mengubah email");
+                      }
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -155,28 +176,63 @@ class _FormEditProfilState extends State<FormEditProfil> {
     );
   }
 
-  void _editProfil(BuildContext context) async {
-    final ApiService apiService = ApiService();
+ void _editProfil(BuildContext context) async {
+  final ApiService apiService = ApiService();
 
-    UserModelBaru? user =
-        Provider.of<UserProvider>(context, listen: false).userBaru;
+  UserModelBaru? user =
+      Provider.of<UserProvider>(context, listen: false).userBaru;
 
-    String usernameBaru = usernameController.text;
-    String Nama = namaController.text;
-    String no = noController.text;
-    String email = emailController.text;
+  String usernameBaru = usernameController.text;
+  String Nama = namaController.text;
+  String no = noController.text;
+  String email = emailController.text;
 
-    // Validasi form, misalnya memastikan semua field terisi dengan benar
+  // Validasi form, misalnya memastikan semua field terisi dengan benar
 
-    try {
+  try {
+    // Pengecekan apakah username baru tidak sama dengan username yang sudah ada
+    if (user!.username != usernameBaru) {
+      // Pengecekan apakah username baru sudah terdaftar
+      Map<String, dynamic> usernameResult =
+          await apiService.cekUsername(usernameBaru);
+
+      if (usernameResult['status'] == 'available') { // Jika username tersedia
+        // Lakukan pembaruan profil
+        Map<String, dynamic> response = await apiService.updateProfil(
+            user.username, usernameBaru, Nama, no, email);
+
+        print('Response from server: $response'); // Cetak respons ke konsol
+
+        if (response['status'] == 'success') {
+          print('sukses mengirim');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginTerbaru(),
+            ),
+          );
+          // Tambahkan logika navigasi atau tindakan setelah login berhasil
+
+          // Set the user data using the provider
+        } else if (response['status'] == 'errorValid') {
+          // Tambahkan logika jika validasi gagal
+        } else {
+          print('Login failed: ${response['message']}');
+        }
+      } else { // Jika username sudah terdaftar
+        // Tampilkan pesan bahwa username sudah terdaftar
+        alert(context, "Username sudah terdaftar");
+      }
+    } else { // Jika username baru sama dengan username yang sudah ada
+      // Lakukan pembaruan profil tanpa melakukan pengecekan username
       Map<String, dynamic> response = await apiService.updateProfil(
-          user!.username, usernameBaru, Nama, no, email);
+          user.username, usernameBaru, Nama, no, email);
 
       print('Response from server: $response'); // Cetak respons ke konsol
 
       if (response['status'] == 'success') {
         print('sukses mengirim');
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => LoginTerbaru(),
@@ -186,12 +242,15 @@ class _FormEditProfilState extends State<FormEditProfil> {
 
         // Set the user data using the provider
       } else if (response['status'] == 'errorValid') {
+        // Tambahkan logika jika validasi gagal
       } else {
         print('Login failed: ${response['message']}');
       }
-    } catch (e) {
-      print('Error during login: $e');
-      // Tambahkan logika penanganan jika terjadi error
     }
+  } catch (e) {
+    print('Error during login: $e');
+    // Tambahkan logika penanganan jika terjadi error
   }
+}
+
 }

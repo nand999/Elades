@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:elades/baru/user_model_baru.dart';
+import 'package:elades/user_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiService {
@@ -8,14 +12,62 @@ class ApiService {
   // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://192.168.1.19:8080/elades/mobile";
-  final String imgUrl = "http://192.168.1.19:8080/elades/mobile/images/";
+  final String baseUrl = "http://172.17.202.253:8080/elades/mobile";
+  final String imgUrl = "http://172.17.202.253:8080/elades/mobile/images/";
   final String fotoProfilUrl =
-      "http://192.168.1.19:8080/elades/mobile/images/profil/";
+      "http://172.17.202.253:8080/elades/mobile/images/profil/";
   final String fotoKtpUrl =
-      "http://192.168.1.19:8080/elades/mobile/images/foto/ktp/";
+      "http://172.17.202.253:8080/elades/mobile/images/foto/ktp/";
 
   // ApiService(this.baseUrl);
+
+  Future<Map<String, dynamic>> cekEmail(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/cek_email.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get email details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting email details: $e');
+    }
+  }
+
+    Future<Map<String, dynamic>> cekUsername(String username) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/cek_username.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'username': username,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get email details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting email details: $e');
+    }
+  }
 
   Future<Map<String, dynamic>> register(
       String username, String password, String nomor) async {
@@ -691,7 +743,7 @@ class ApiService {
     }
   }
 
-    Future<Map<String, dynamic>> getPenghasilanDetail(String idProduk) async {
+  Future<Map<String, dynamic>> getPenghasilanDetail(String idProduk) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/get_detail_penghasilan.php'),
@@ -715,7 +767,7 @@ class ApiService {
     }
   }
 
-      Future<Map<String, dynamic>> getKematianDetail(String idProduk) async {
+  Future<Map<String, dynamic>> getKematianDetail(String idProduk) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/get_detail_mati.php'),
@@ -1151,7 +1203,8 @@ class ApiService {
     }
   }
 
-    Future<Map<String, dynamic>> updateKtpPenghasilan(String userId, File image) async {
+  Future<Map<String, dynamic>> updateKtpPenghasilan(
+      String userId, File image) async {
     try {
       // Ubah ini menjadi 'uploadKtp' agar sesuai dengan nama metode yang benar
       String fileName = Uuid().v4() + ".jpg";
@@ -1214,7 +1267,7 @@ class ApiService {
     }
   }
 
-    Future<Map<String, dynamic>> updateSandi(String email, String sandi) async {
+  Future<Map<String, dynamic>> updateSandi(String email, String sandi) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/update_sandi.php'),
@@ -1236,6 +1289,76 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Error during registration: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserData(
+      BuildContext context, String username) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/get_user_data.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'username': username,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        // Set user data to UserProvider after fetching from API
+        context.read<UserProvider>().setUserBaru(
+              UserModelBaru(
+                username: responseData['username'] ?? '',
+                nama: responseData['nama'] ?? '',
+                foto_profil: responseData['foto_profil'] ?? '',
+                email: responseData['email'] ?? '',
+                noHp: responseData['no_hp'] ?? '',
+                created: responseData['created'] ?? '',
+                kode_otp: responseData['kode_otp'] ?? '',
+              ),
+            );
+
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get product details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting product details: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserFotoProfil(
+      BuildContext context, String username) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/get_user_data.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'username': username,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        // Update only the foto_profil in UserProvider after fetching from API
+        context
+            .read<UserProvider>()
+            .updateUserFotoProfil(responseData['foto_profil'] ?? '');
+
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to get product details. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error getting product details: $e');
     }
   }
 }

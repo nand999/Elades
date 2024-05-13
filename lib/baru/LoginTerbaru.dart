@@ -138,7 +138,10 @@ class _LoginTerbaruState extends State<LoginTerbaru> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            if (passwordController.text.length < 8){
+                            if(usernameController.text.isEmpty || passwordController.text.isEmpty){
+                              alert(context, "Isi username dan sandi terlebih dahulu");
+                            }
+                            else if (passwordController.text.length < 8){
                               alert(context, "Panjang sandi minimal 8 karakter");
                             } else{
                               _login(context);

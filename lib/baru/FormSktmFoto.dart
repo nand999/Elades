@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-
 class FormSktmFoto extends StatefulWidget {
   const FormSktmFoto({Key? key}) : super(key: key);
 
@@ -38,6 +37,13 @@ class _FormSktmFotoState extends State<FormSktmFoto> {
   Widget build(BuildContext context) {
     UserModelBaru? user = context.read<UserProvider>().userBaru;
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Unggah foto KK anda",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xff2e3654),
+      ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30, 50, 30, 30),
         child: Center(
@@ -176,7 +182,8 @@ class _FormSktmFotoState extends State<FormSktmFoto> {
       },
     );
   }
-      void alert(BuildContext context, String message) {
+
+  void alert(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

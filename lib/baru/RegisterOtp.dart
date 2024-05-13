@@ -45,6 +45,7 @@ class _RegisterOtpState extends State<RegisterOtp> {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        keyboardType: TextInputType.number,
                         controller: otp,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.security),

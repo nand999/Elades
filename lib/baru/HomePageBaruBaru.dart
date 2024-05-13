@@ -1,4 +1,3 @@
-
 import 'package:elades/baru/DetailBerita.dart';
 import 'package:elades/baru/ProfilPageBaruBaru.dart';
 import 'package:elades/baru/user_model_baru.dart';
@@ -28,11 +27,8 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
   }
 
   Future<void> fetchDataAndStatus() async {
-  await Future.wait([
-    fetchStatus(),
-    fetchData()
-  ]);
-}
+    await Future.wait([fetchStatus(), fetchData()]);
+  }
 
   Future<void> fetchData() async {
     try {
@@ -190,11 +186,15 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                                  apiService.imgUrl + product['foto'],
-                                  width: double.infinity,
-                                  height: 150.0,
-                                  fit: BoxFit.cover,
-                                ),
+                                      apiService.imgUrl + product['foto'],
+                                      width: double.infinity,
+                                      height: 150.0,
+                                      fit: BoxFit.cover,
+                                    ) ??
+                                    Image.asset("assets/noImage.jpg",
+                                        width: double.infinity,
+                                        height: 150.0,
+                                        fit: BoxFit.cover),
                               ),
                               SizedBox(height: 8.0),
                               Text(

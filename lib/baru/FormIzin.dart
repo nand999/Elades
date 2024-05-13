@@ -61,6 +61,7 @@ class _FormIzinState extends State<FormIzin> {
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
                   controller: nikController,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.key),
                     labelText: 'NIK',
@@ -350,6 +351,8 @@ class _FormIzinState extends State<FormIzin> {
         alasan.isEmpty ||
         tanggal.isEmpty) {
       alert(context, "Lengkapi semua data terlebih dahulu");
+    } else if(nikController.text.length<16){
+      alert(context, "Panjang NIK harus 16 karakter");
     } else {
       try {
         Map<String, dynamic> response = await apiService.kirimSuratIzin(

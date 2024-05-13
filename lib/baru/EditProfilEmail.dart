@@ -27,7 +27,7 @@ class _EditProfilEmailState extends State<EditProfilEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lupa Sandi'),
+        title: Text('Ubah Email'),
       ),
       body: SingleChildScrollView(
         child: Padding(

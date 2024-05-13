@@ -28,6 +28,7 @@ class _FormSkckState extends State<FormSkck> {
   TextEditingController tempTglController = TextEditingController();
 
   String _selectedGender = 'Laki-laki';
+  String _statusPerkawinan = 'Belum kawin';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +69,7 @@ class _FormSkckState extends State<FormSkck> {
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
                   controller: nikController,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.key),
                     labelText: 'NIK',
@@ -154,15 +156,54 @@ class _FormSkckState extends State<FormSkck> {
                 ),
               ),
 
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+              //   child: TextFormField(
+              //     controller: stKawinController,
+              //     decoration: InputDecoration(
+              //       prefixIcon: Icon(Icons.woman),
+              //       labelText: 'Status Perkawinan',
+              //       border: OutlineInputBorder(),
+              //     ),
+              //   ),
+              // ),
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: TextFormField(
-                  controller: stKawinController,
+                child: DropdownButtonFormField<String>(
+                  value: _statusPerkawinan,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.woman),
                     labelText: 'Status Perkawinan',
                     border: OutlineInputBorder(),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _statusPerkawinan = newValue!;
+                    });
+                  },
+                  items: <String>[
+                    'Belum kawin',
+                    'Kawin belum tercatat',
+                    'Kawin tercatat',
+                    'Cerai hidup',
+                    'Cerai mati'
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Row(
+                        children: [
+                          Icon(
+                            value == 'Belum kawin' ? Icons.male : Icons.female,
+                            color: Colors.black,
+                          ),
+                          SizedBox(width: 10),
+                          Text(value),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
 
@@ -289,12 +330,13 @@ class _FormSkckState extends State<FormSkck> {
         nik.isEmpty ||
         tempatLahir.isEmpty ||
         tglLahir.isEmpty ||
-        statusKawin.isEmpty ||
         agama.isEmpty ||
         pekerjaan.isEmpty ||
         kebangsaan.isEmpty ||
         tempatTinggal.isEmpty) {
       alert(context, "Lengkapi semua data terlebih dahulu!");
+    } else if (nikController.text.length < 16) {
+      alert(context, "Panjang NIK harus 16 karakter");
     } else {
       try {
         ApiService apiService = ApiService();
@@ -307,7 +349,7 @@ class _FormSkckState extends State<FormSkck> {
           pekerjaan,
           agama,
           jk,
-          statusKawin,
+          _statusPerkawinan,
           tempatTinggal,
         );
 

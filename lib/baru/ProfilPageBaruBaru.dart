@@ -48,11 +48,12 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
           UserModelBaru? updatedUser = context.read<UserProvider>().userBaru;
           if (updatedUser != null) {
             context.read<UserProvider>().setUserBaru(updatedUser);
+            print(updatedUser!.foto_profil);
           }
         });
         // Navigator.pop(context);
         // Navigator.pushReplacement(context,
-        //     MaterialPageRoute(builder: (context) => ProfilPageBaruBaru()));
+        // MaterialPageRoute(builder: (context) => ProfilPageBaruBaru()));
       } catch (e) {
         // Tampilkan pesan kesalahan jika gagal mengupdate foto profil
         showDialog(
@@ -87,10 +88,12 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
               user.username!, image); // Perubahan di sini
           print('Update foto_profil success ' + user.username.toString());
           setState(() {
-            UserModelBaru? updatedUser = context.read<UserProvider>().userBaru;
-            if (updatedUser != null) {
-              context.read<UserProvider>().setUserBaru(updatedUser);
-            }
+            // UserModelBaru? updatedUser = context.read<UserProvider>().userBaru;
+            // if (updatedUser != null) {
+            //   context.read<UserProvider>().setUserBaru(updatedUser);
+            // }
+            // apiService.getUserFotoProfil(context, user.username!);
+            print(user!.foto_profil);
           });
           // Lakukan tindakan tambahan jika diperlukan setelah berhasil memperbarui foto profil
         } else {

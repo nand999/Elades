@@ -158,7 +158,8 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                                 .toString()),
                                       ),
                                     );
-                                  } else if (product['kode_surat'] == "surat_mati") {
+                                  } else if (product['kode_surat'] ==
+                                      "surat_mati") {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -176,7 +177,8 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                                 .toString()),
                                       ),
                                     );
-                                  } else if (product['kode_surat'] == "surat_penghasilan") {
+                                  } else if (product['kode_surat'] ==
+                                      "surat_penghasilan") {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -206,27 +208,52 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              product['kode_surat'],
-                                              style: TextStyle(fontSize: 18.0),
-                                            ),
+                                            child: product['kode_surat'] ==
+                                                    "surat_ijin"
+                                                ? Text(
+                                                    "Surat izin",
+                                                    style: TextStyle(
+                                                        fontSize: 18.0),
+                                                  )
+                                                : product['kode_surat'] ==
+                                                        "surat_mati"
+                                                    ? Text(
+                                                        "Surat kematian",
+                                                        style: TextStyle(
+                                                            fontSize: 18.0),
+                                                      )
+                                                    : product['kode_surat'] ==
+                                                            "surat_penghasilan"
+                                                        ? Text(
+                                                            "Surat penghasilan",
+                                                            style: TextStyle(
+                                                                fontSize: 18.0),
+                                                          )
+                                                        : Text(
+                                                            product[
+                                                                'kode_surat'],
+                                                            style: TextStyle(
+                                                                fontSize: 18.0),
+                                                          ),
                                           ),
-                                          // SizedBox(
-                                          //   width: 210,
-                                          // ),
                                           Spacer(),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10,right: 10),
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
                                             child: Text(
-                                              product['status'],
-                                              style: TextStyle(fontSize: 18.0, color: _getStatusColor(product['status']), fontWeight: FontWeight.bold),
-                                              
+                                              product['status'] == "Masuk"
+                                                  ? "Terkirim"
+                                                  : product['status'],
+                                              style: TextStyle(
+                                                fontSize: 18.0,
+                                                color: _getStatusColor(
+                                                    product['status']),
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      // SizedBox(height: 2.0),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 10),
@@ -235,7 +262,6 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                           style: TextStyle(fontSize: 18.0),
                                         ),
                                       ),
-                                      // Spacer(), // Spacer untuk memberikan ruang di antara nama dan tanggal
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
@@ -275,7 +301,7 @@ class _PengajuanPageState extends State<PengajuanPage> {
         return Colors.red;
       case 'Masuk':
         return Colors.black;
-      case 'Diterima':
+      case 'Selesai':
         return Colors.green;
       default:
         return Colors

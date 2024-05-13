@@ -10,6 +10,7 @@ import 'package:elades/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'ProfilPageBaruBaru.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BerandaPageBaruBaru extends StatefulWidget {
   const BerandaPageBaruBaru({Key? key}) : super(key: key);
@@ -29,57 +30,36 @@ class _BerandaPageBaruBaruState extends State<BerandaPageBaruBaru> {
     ProfilPageBaruBaru(),
   ];
 
+    String _getGreeting(DateTime now) {
+    var hour = now.hour;
+    if (hour < 12) {
+      return "Selamat Pagi!";
+    } else if (hour < 18) {
+      return "Selamat Siang!";
+    } else if (hour < 21) {
+      return "Selamat Sore!";
+    } else {
+      return "Selamat Malam!";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ApiService apiService = ApiService();
     UserModelBaru? user = context.watch<UserProvider>().userBaru;
+    var now = DateTime.now();
+    var greeting = _getGreeting(now);
+
+    
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: Text("Selamat Datang! " + user!.username.toString()),
-        //   leading: InkWell(
-        //     onTap: () {
-        //       setState(() {
-        //         _currentIndex = 4;
-        //       });
-        //     },
-        //     child: Container(
-        //       margin: EdgeInsets.all(8.0),
-        //       child: user != null && user!.foto_profil != null
-        //           ? ClipOval(
-        //               child: Image.network(
-        //                 apiService.fotoProfilUrl + user!.foto_profil!,
-        //                 width: 40,
-        //                 height: 40,
-        //                 fit: BoxFit.cover,
-        //                 errorBuilder: (context, error, stackTrace) {
-        //                   print('Error loading image: $error');
-        //                   return Image.asset(
-        //                     'assets/nullPP.jpg',
-        //                     width: 40,
-        //                     height: 40,
-        //                     fit: BoxFit.cover,
-        //                   );
-        //                 },
-        //               ),
-        //             )
-        //           : ClipOval(
-        //               child: Image.asset(
-        //                 'assets/nullPP.jpg',
-        //                 width: 40,
-        //                 height: 40,
-        //                 fit: BoxFit.cover,
-        //               ),
-        //             ),
-        //     ),
-        //   ),
-        // ),
         appBar: _currentIndex == 0
             ? AppBar(
                 backgroundColor: Color(0xff2e3654),
                 title: Text(
-                  "Selamat Datang! " + user!.username.toString(),
+                  "$greeting " + user!.username.toString(),
                   style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -174,21 +154,6 @@ class _BerandaPageBaruBaruState extends State<BerandaPageBaruBaru> {
     );
   }
 
-  // void _onTabTapped(int index) {
-  //   if (index == 2) {
-  //     // Handle the plus button click
-  //   } else if (index == 4) {
-  //     // Handle the action for the last button (index 4)
-  //     setState(() {
-  //       _currentIndex = 2; // Index of ProfilPage
-  //     });
-  //   } else if (index >= 0 && index < _children.length) {
-  //     setState(() {
-  //       _currentIndex = index;
-  //     });
-  //   }
-  // }
-
   void _onTabTapped(int index) {
     if (index == 2) {
       // _currentIndex = 0;
@@ -212,7 +177,7 @@ class PopUpOptions {
         return Wrap(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.abc),
+              leading: Icon(Icons.mail_rounded),
               title: Text('Pengantar SKCK'),
               onTap: () {
                 // Handle option 1
@@ -227,7 +192,7 @@ class PopUpOptions {
               },
             ),
             ListTile(
-              leading: Icon(Icons.abc),
+              leading: Icon(Icons.mail_rounded),
               title: Text('Surat Keteranan Tidak Mampu'),
               onTap: () {
                 // Handle option 2
@@ -242,7 +207,7 @@ class PopUpOptions {
               },
             ),
             ListTile(
-              leading: Icon(Icons.abc),
+              leading: Icon(Icons.mail_rounded),
               title: Text('Surat Izin'),
               onTap: () {
                 // Handle option 3
@@ -257,7 +222,7 @@ class PopUpOptions {
               },
             ),
             ListTile(
-              leading: Icon(Icons.abc),
+              leading: Icon(Icons.mail_rounded),
               title: Text('Surat Kematian'),
               onTap: () {
                 Navigator.push(
@@ -271,7 +236,7 @@ class PopUpOptions {
               },
             ),
             ListTile(
-              leading: Icon(Icons.abc),
+              leading: Icon(Icons.mail_rounded),
               title: Text('Surat Keterangan Penghasilan'),
               onTap: () {
                 Navigator.push(
@@ -289,4 +254,5 @@ class PopUpOptions {
       },
     );
   }
+  
 }

@@ -2,6 +2,7 @@ import 'package:elades/ApiService.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:elades/baru/RegisterOtp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RegisterPageBaru extends StatefulWidget {
   const RegisterPageBaru({Key? key}) : super(key: key);
@@ -34,11 +35,11 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Textfield dengan Prefix Icon dan Box Line
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
                   controller: usernameController,
+                  inputFormatters: [OnlyLettersInputFormatter()],
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
                     labelText: 'Username',
@@ -46,7 +47,6 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
@@ -58,7 +58,6 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
@@ -70,11 +69,11 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
                   controller: telpController,
+                  keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.phone),
                     labelText: 'No. Telp',
@@ -82,7 +81,6 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
@@ -105,7 +103,6 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
@@ -159,19 +156,26 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                         confirmPasswordController.text.length < 8) {
                       alert(context, "Panjang sandi minimal 8 karakter",
                           "Gagal mendaftar!", Icons.error, Colors.red);
+                    } else if (usernameController.text.contains(" ")) {
+                      alert(context, "Username tidak boleh mengandung spasi",
+                          "Gagal mendaftar!", Icons.error, Colors.red);
+                    } else if (usernameController.text.length > 8) {
+                      alert(context, "Username maksimal 8 karakter",
+                          "Gagal mendaftar!", Icons.error, Colors.red);
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterOtp(
-                            email: emailController.text,
-                            nama: NamaController.text,
-                            noTelp: telpController.text,
-                            password: passwordController.text,
-                            username: usernameController.text,
-                          ),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => RegisterOtp(
+                      //       email: emailController.text,
+                      //       nama: NamaController.text,
+                      //       noTelp: telpController.text,
+                      //       password: passwordController.text,
+                      //       username: usernameController.text,
+                      //     ),
+                      //   ),
+                      // );
+                      _register();
                     }
                   },
                   child: Center(
@@ -192,46 +196,37 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
     );
   }
 
-  void _register() async {
-    String username = usernameController.text;
-    String email = emailController.text;
-    String notelp = telpController.text;
-    String password = passwordController.text;
-    String confirmPassword = confirmPasswordController.text;
-    String nama = NamaController.text;
+void _register() async {
+  String username = usernameController.text;
+  String email = emailController.text;
+  String notelp = telpController.text;
+  String password = passwordController.text;
+  String confirmPassword = confirmPasswordController.text;
+  String nama = NamaController.text;
 
-    // Validasi form, misalnya memastikan semua field terisi dengan benar
-    if (username.isEmpty ||
-        email.isEmpty ||
-        notelp.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty ||
-        nama.isEmpty) {
-      // Tampilkan pesan alert jika ada field yang kosong
-      alert(context, "Harap lengkapi semua data.", "gagal mendaftar!",
-          Icons.error, Colors.red);
-      return;
-    } else if (password == confirmPassword) {
-      try {
-        Map<String, dynamic> response = await apiService.registerBaru(
-            username, password, email, notelp, nama);
+  // Validasi form, memastikan semua field terisi dengan benar
+  if (username.isEmpty ||
+      email.isEmpty ||
+      notelp.isEmpty ||
+      password.isEmpty ||
+      confirmPassword.isEmpty ||
+      nama.isEmpty) {
+    // Menampilkan pesan alert jika ada field yang kosong
+    alert(context, "Harap lengkapi semua data.", "Gagal mendaftar!",
+        Icons.error, Colors.red);
+    return;
+  } else if (password == confirmPassword) {
+    try {
+      Map<String, dynamic> emailResult =
+          await apiService.cekEmail(emailController.text); // Pengecekan email
 
-        if (response['status'] == 'success') {
+      if (emailResult['status'] == 'available') { // Jika email tersedia
+        // Memeriksa ketersediaan username
+        Map<String, dynamic> usernameResult =
+            await apiService.cekUsername(usernameController.text);
+
+        if (usernameResult['status'] == 'available') { // Jika username tersedia
           print('Registration successful');
-
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => LoginTerbaru(),
-          //   ),
-          // );
-
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => RegisterOtp(),
-          //   ),
-          // );
 
           Navigator.push(
             context,
@@ -248,19 +243,25 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
 
           // alert(context, "Silahkan Masuk", "Berhasil Mendaftar!", Icons.check,
           //     Colors.green);
-        } else {
-          print('Registration failed: ${response['message']}');
-          // Tambahkan logika penanganan jika registrasi gagal
+        } else { // Jika username sudah ada
+          print('Registration failed: Username already exists');
+          alert(context, "Username sudah terdaftar", "Gagal mendaftar", Icons.error, Colors.red);
         }
-      } catch (e) {
-        print('Error during registration: $e');
-        // Tambahkan logika penanganan jika terjadi error
+      } else { // Jika email sudah terdaftar
+        print('Registration failed: Email already exists');
+        alert(context, "Email sudah terdaftar","Gagal mendaftar", Icons.error,Colors.red);
       }
-    } else {
-      alert(context, "Sandi dan konfirmasi sandi tidak sesuai.",
-          "gagal mendaftar!", Icons.error, Colors.red);
+    } catch (e) {
+      print('Error during registration: $e');
+      // Tambahkan logika penanganan jika terjadi error
+      alert(context, "Gagal mendaftar", "Error during registration", Icons.error, Colors.red);
     }
+  } else {
+    alert(context, "Sandi dan konfirmasi sandi tidak sesuai.",
+        "Gagal mendaftar!", Icons.error, Colors.red);
   }
+}
+
 }
 
 void alert(BuildContext context, String message, String title, IconData icon,
@@ -354,4 +355,14 @@ Widget contentBox(BuildContext context, String message, String title,
       ),
     ],
   );
+}
+
+class OnlyLettersInputFormatter implements TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only letters
+    String newText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+    return newValue.copyWith(text: newText);
+  }
 }

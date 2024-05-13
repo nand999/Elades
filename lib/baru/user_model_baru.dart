@@ -3,12 +3,11 @@
 class UserModelBaru {
   final String username;
   final String nama;
-  final dynamic foto_profil;
+  dynamic foto_profil;
   final String email;
   final String noHp;
   final String created;
   final dynamic kode_otp;
- 
 
   UserModelBaru({
     required this.nama,

@@ -40,6 +40,13 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
   Widget build(BuildContext context) {
     UserModelBaru? user = context.read<UserProvider>().userBaru;
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Unggah foto KTP almarhum/almarhumah",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xff2e3654),
+      ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30, 50, 30, 30),
         child: Center(
@@ -93,8 +100,8 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
                           String userId = user!.username;
 
                           // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
-                          Map<String, dynamic> result =
-                              await ApiService().updateKtpMati(userId, _image1!);
+                          Map<String, dynamic> result = await ApiService()
+                              .updateKtpMati(userId, _image1!);
 
                           // Lakukan penanganan hasil jika diperlukan
                           print('Update successful: $result');
@@ -178,7 +185,8 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
       },
     );
   }
-    void alert(BuildContext context, String message) {
+
+  void alert(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -70,52 +70,54 @@ class DetailIzin extends StatelessWidget {
                   child: ListView(
                     children: [
                       // buildDetailCard('Kode Surat', productDetails['kode_surat']),
-                      buildDetailCard('Tanggal', productDetails['tanggal_pengajuan']),
+                      buildDetailCard(
+                          'Tanggal', productDetails['tanggal_pengajuan']),
                       buildDetailCard('Nama', productDetails['Nama']),
                       buildDetailCard('NIK', productDetails['nik']),
-                      buildDetailCard('Tempat, Tanggal Lahir', productDetails['Tempat_tanggal_lahir']),
-                      buildDetailCard('Kebangsaan', productDetails['Kewarganegaraan']),
+                      buildDetailCard('Tempat, Tanggal Lahir',
+                          productDetails['Tempat_tanggal_lahir']),
+                      buildDetailCard(
+                          'Kebangsaan', productDetails['Kewarganegaraan']),
                       buildDetailCard('Alamat', productDetails['Alamat']),
                       buildDetailCard('Agama', productDetails['Agama']),
-                      buildDetailCard('Jenis Kelamin', productDetails['Jenis_kelamin']),
+                      buildDetailCard(
+                          'Jenis Kelamin', productDetails['Jenis_kelamin']),
                       // buildDetailCard('Status Perkawinan', productDetails['status_perkawinan']),
                       buildDetailCard('Pekerjaan', productDetails['Pekerjaan']),
                       // buildDetailCard('Tempat Tinggal', productDetails['tempat_tinggal']),
-                      buildDetailCard('Tempat Kerja', productDetails['Tempat_Kerja']),
+                      buildDetailCard(
+                          'Tempat Kerja', productDetails['Tempat_Kerja']),
                       buildDetailCard('Bagian', productDetails['Bagian']),
                       buildDetailCard('Alasan', productDetails['Alasan']),
-                      buildDetailCard('Tanggal', productDetails['tanggal_surat_ijin']),
-                      
+                      buildDetailCard(
+                          'Tanggal', productDetails['tanggal_surat_ijin']),
+
                       // buildDetailCard('Username', productDetails['username']),
                       // buildDetailCard('No Pengajuan', productDetails['no_pengajuan']),
                     ],
                   ),
                 ),
-                Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Card(
-                        elevation: 20,
-                        color: Colors.blue,
-                        child: Container(
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              productDetails['nik'].toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                if (productDetails['alasan'] !=
+                    null) // Tambahkan kondisi di sini
+                  Card(
+                    elevation: 20,
+                    color: Colors.red,
+                    child: Container(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "Alasan Ditolak: " +
+                              productDetails['alasan'].toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
               ],
             ),
           );
