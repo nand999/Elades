@@ -332,7 +332,26 @@ class UserInfoCard extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text("Konfirmasi"),
+                            title: Column(
+                              children: [
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.redAccent,
+                                    ),
+                                    Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Text("Konfirmasi"),
+                              ],
+                            ),
                             content: Text("Yakin untuk menghapus akun Anda?"),
                             actions: [
                               TextButton(
@@ -346,8 +365,8 @@ class UserInfoCard extends StatelessWidget {
                                   UserModelBaru? user =
                                       context.read<UserProvider>().userBaru;
                                   apiService.hapusAkun(user!.username);
-                                  Navigator.of(context).pop();
-                                  // Tutup dialog setelah menghapus
+                                  Navigator.of(context)
+                                      .pop(); // Tutup dialog setelah menghapus
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -406,11 +425,54 @@ class UserInfoCard extends StatelessWidget {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginTerbaru(),
-                            ),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Column(
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 30,
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                        Icon(
+                                          Icons.error,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text("Konfirmasi"),
+                                  ],
+                                ),
+                                content:
+                                    Text("Yakin untuk keluar?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Tutup dialog
+                                    },
+                                    child: Text("Tidak"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginTerbaru(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text("Ya"),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                         splashColor: Color(0xff2e3654),

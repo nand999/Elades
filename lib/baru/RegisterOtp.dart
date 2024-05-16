@@ -58,7 +58,7 @@ class _RegisterOtpState extends State<RegisterOtp> {
                     ElevatedButton(
                       onPressed: () async {
                         myauth.setConfig(
-                            appEmail: "codingnanda@gmail.com",
+                            appEmail: "me@rohitchouhan.com",
                             appName: "Elades",
                             userEmail: widget.email,
                             otpLength: 6,

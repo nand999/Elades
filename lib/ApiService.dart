@@ -12,12 +12,13 @@ class ApiService {
   // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://172.17.202.253:8080/elades/mobile";
-  final String imgUrl = "http://172.17.202.253:8080/elades/mobile/images/";
+  final String baseUrl = "http://192.168.137.1:8080/elades/mobile";
+  final String imgUrl = "http://192.168.137.1:8080/elades/mobile/images/";
   final String fotoProfilUrl =
-      "http://172.17.202.253:8080/elades/mobile/images/profil/";
+      "http://192.168.137.1:8080/elades/mobile/images/profil/";
   final String fotoKtpUrl =
-      "http://172.17.202.253:8080/elades/mobile/images/foto/ktp/";
+      "http://192.168.137.1:8080/elades/mobile/images/foto/ktp/";
+  final String server = "http://192.168.137.1:8080/api/MobileApi";
 
   // ApiService(this.baseUrl);
 
@@ -426,6 +427,31 @@ class ApiService {
     }
   }
 
+  //   Future<Map<String, dynamic>> loginBaru(
+  //     String username, String password) async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('$server/login'),
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json; charset=UTF-8',
+  //       },
+  //       body: jsonEncode(<String, String>{
+  //         'username': username,
+  //         'password': password,
+  //       }),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> responseData = json.decode(response.body);
+  //       return responseData;
+  //     } else {
+  //       throw Exception('Login failed. Server error: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Error during login: $e');
+  //   }
+  // }
+
   // Future<List<Map<String, dynamic>>> getPengajuan(String username) async {
   //   try {
   //     final response = await http.get(Uri.parse('$baseUrl/get_pengajuan.php?username=$username'));
@@ -462,10 +488,10 @@ class ApiService {
         return mappedData;
       } else {
         throw Exception(
-            'Gagal mengambil riwayat pengajuan. Server error: ${response.statusCode}');
+            'Gagal mengambil riwayat pengajuan surat. Server error: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error mengambil pengajuan: $e');
+      throw Exception('Error mengambil riwayat pengajuan surat: $e');
     }
   }
 

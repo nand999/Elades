@@ -98,9 +98,9 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                 expandedHeight: 200.0,
                 pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
-                  title: Text('Header'),
+                  title: Text(''),
                   background: Image.asset(
-                    'assets/galaxy.jpg',
+                    'assets/banner.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),

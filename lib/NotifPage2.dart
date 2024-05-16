@@ -46,52 +46,57 @@ class _NotifPage2State extends State<NotifPage2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifikasi', style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Notifikasi',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Color(0xff2e3654),
       ),
       body: RefreshIndicator(
         onRefresh: fetchData,
-        child: ListView.builder(
-          itemCount: laporan.length,
-          itemBuilder: (context, index) {
-            Color statusColor = Colors.blue;
-            if (laporan[index]['status'] == 'Tolak') {
-              statusColor = Colors.red;
-            } else if (laporan[index]['status'] == 'Selesai') {
-              statusColor = Colors.green;
-            }
-        
-            return Card(
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: ListTile(
-                title: Text(
-                  laporan[index]['tanggal'],
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 4),
-                    Text(
-                      laporan[index]['nama'] ?? "",
-                      style: TextStyle(fontStyle: FontStyle.italic),
+        child: laporan.isEmpty
+            ? Center(child: Text("Belum ada notifikasi"))
+            : ListView.builder(
+                itemCount: laporan.length,
+                itemBuilder: (context, index) {
+                  Color statusColor = Colors.blue;
+                  if (laporan[index]['status'] == 'Tolak') {
+                    statusColor = Colors.red;
+                  } else if (laporan[index]['status'] == 'Selesai') {
+                    statusColor = Colors.green;
+                  }
+
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListTile(
+                      title: Text(
+                        laporan[index]['tanggal'],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 4),
+                          Text(
+                            laporan[index]['nama'] ?? "",
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            laporan[index]['alasan'] ?? "",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                      trailing: Text(
+                        laporan[index]['status'],
+                        style: TextStyle(color: statusColor),
+                      ),
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      laporan[index]['alasan'] ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-                trailing: Text(
-                  laporan[index]['status'],
-                  style: TextStyle(color: statusColor),
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

@@ -78,6 +78,7 @@ flutter:
     - assets/ktp.png
     - assets/centang.png
     - assets/noImage.jpg
+    - assets/banner.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

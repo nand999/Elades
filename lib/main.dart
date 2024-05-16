@@ -1,11 +1,8 @@
+import 'package:elades/SplashScreen.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'user_provider.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
 
 void main() {
   runApp(
@@ -23,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginTerbaru(),
+      home: SplashScreen(),
     );
   }
 }

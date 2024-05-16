@@ -133,7 +133,7 @@ class _LupaPageSandiState extends State<LupaPageSandi> {
                   },
                   child: Center(
                     child: Text(
-                      "Mendaftar",
+                      "Ubah Sandi",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

@@ -1,4 +1,3 @@
-// Di bagian atas file, import ApiService.dart
 import 'package:elades/baru/DetailIzin.dart';
 import 'package:elades/baru/DetailKematian.dart';
 import 'package:elades/baru/DetailPengajuan.dart';
@@ -68,6 +67,10 @@ class _PengajuanPageState extends State<PengajuanPage> {
               // Tampilkan daftar produk di sini
               List<Map<String, dynamic>> productList =
                   snapshot.data as List<Map<String, dynamic>>;
+
+              if (productList.isEmpty) {
+                return Center(child: Text("Belum ada riwayat pengajuan surat"));
+              }
 
               return CustomScrollView(
                 slivers: [

@@ -1,5 +1,4 @@
 import 'package:elades/ApiService.dart';
-import 'package:elades/NotifPage.dart';
 import 'package:elades/NotifPage2.dart';
 import 'package:elades/baru/HomePageBaruBaru.dart';
 import 'package:elades/baru/PengajuanPage.dart';
@@ -10,7 +9,6 @@ import 'package:elades/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'ProfilPageBaruBaru.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class BerandaPageBaruBaru extends StatefulWidget {
   const BerandaPageBaruBaru({Key? key}) : super(key: key);
@@ -31,12 +29,13 @@ class _BerandaPageBaruBaruState extends State<BerandaPageBaruBaru> {
   ];
 
     String _getGreeting(DateTime now) {
-    var hour = now.hour;
-    if (hour < 12) {
+    var hour = now.hour ;
+    print("SEKARANG ADALAH JAM: "+ hour.toString());
+    if (hour < 10) {
       return "Selamat Pagi!";
-    } else if (hour < 18) {
+    } else if (hour < 15) {
       return "Selamat Siang!";
-    } else if (hour < 21) {
+    } else if (hour < 18) {
       return "Selamat Sore!";
     } else {
       return "Selamat Malam!";
