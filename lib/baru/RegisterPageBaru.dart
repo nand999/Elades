@@ -215,6 +215,9 @@ void _register() async {
     alert(context, "Harap lengkapi semua data.", "Gagal mendaftar!",
         Icons.error, Colors.red);
     return;
+  } else if(notelp.length>13 || notelp.length<12){
+    alert(context, "Nomor HP maksimal 13 digit, minimal 12 digit, dimulai dengan 08...", "Gagal mendaftar!",
+        Icons.error, Colors.red);
   } else if (password == confirmPassword) {
     try {
       Map<String, dynamic> emailResult =

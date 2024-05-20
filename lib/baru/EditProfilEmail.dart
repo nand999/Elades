@@ -5,10 +5,17 @@ import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class EditProfilEmail extends StatefulWidget {
   final String username, nama, noHp, email;
-  const EditProfilEmail({Key? key, required this.email, required this.nama, required this.noHp, required this.username,}) : super(key: key);
+  const EditProfilEmail({
+    Key? key,
+    required this.email,
+    required this.nama,
+    required this.noHp,
+    required this.username,
+  }) : super(key: key);
 
   @override
   State<EditProfilEmail> createState() => _EditProfilEmailState();
@@ -22,6 +29,12 @@ class _EditProfilEmailState extends State<EditProfilEmail> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController otpController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController(text: widget.email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,34 +104,32 @@ class _EditProfilEmailState extends State<EditProfilEmail> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: TextFormField(
-                  controller: otpController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.numbers),
-                    labelText: 'Masukkan kode OTP',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+              //   child: TextFormField(
+              //     controller: otpController,
+              //     decoration: InputDecoration(
+              //       prefixIcon: Icon(Icons.numbers),
+              //       labelText: 'Masukkan kode OTP',
+              //       border: OutlineInputBorder(),
+              //     ),
+              //   ),
+              // ),
 
-              SizedBox(height: 40.0),
+              SizedBox(height: 20),
 
-              Ink(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(203, 164, 102, 1),
-                      Color.fromRGBO(203, 164, 102, 1),
-                    ],
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    if (await myauth.verifyOTP(otp: otpController.text) ==
+              OtpTextField(
+                numberOfFields: 6,
+                borderColor: Color.fromRGBO(203, 164, 102, 1),
+                //set to true to show as box or false to show as dash
+                showFieldAsBox: true,
+                //runs when a code is typed in
+                onCodeChanged: (String code) {
+                  //handle validation or checks here
+                },
+                //runs when every textfield is filled
+                onSubmit: (String verificationCode) async {
+                    if (await myauth.verifyOTP(otp: verificationCode) ==
                         true) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("OTP berhasil diverifikasi"),
@@ -129,25 +140,55 @@ class _EditProfilEmailState extends State<EditProfilEmail> {
                         content: Text("OTP tidak valid"),
                       ));
                     }
-                  },
-                  child: Center(
-                    child: Text(
-                      "Berikutnya",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                  },// end onSubmit
               ),
+
+              SizedBox(height: 40.0),
+
+              // Ink(
+              //   height: 50,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10),
+              //     gradient: LinearGradient(
+              //       colors: [
+              //         Color.fromRGBO(203, 164, 102, 1),
+              //         Color.fromRGBO(203, 164, 102, 1),
+              //       ],
+              //     ),
+              //   ),
+              //   child: InkWell(
+              //     onTap: () async {
+              //       if (await myauth.verifyOTP(otp: otpController.text) ==
+              //           true) {
+              //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              //           content: Text("OTP berhasil diverifikasi"),
+              //         ));
+              //         _editProfil(context);
+              //       } else {
+              //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              //           content: Text("OTP tidak valid"),
+              //         ));
+              //       }
+              //     },
+              //     child: Center(
+              //       child: Text(
+              //         "Berikutnya",
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
       ),
     );
   }
-    void _editProfil(BuildContext context) async {
+
+  void _editProfil(BuildContext context) async {
     final ApiService apiService = ApiService();
 
     UserModelBaru? user =

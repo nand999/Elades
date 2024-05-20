@@ -3,6 +3,7 @@ import 'package:elades/LupaPageSandi.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class LupaPage extends StatefulWidget {
   const LupaPage({Key? key}) : super(key: key);
@@ -88,17 +89,57 @@ class _LupaPageState extends State<LupaPage> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: otpController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.numbers),
-                    labelText: 'Masukkan kode OTP',
-                    border: OutlineInputBorder(),
-                  ),
+              SizedBox(height: 20),
+              Center(
+                child: Text(
+                  "Masukkan kode OTP anda:",
+                  style: TextStyle(fontSize: 18),
                 ),
+              ),
+              SizedBox(height: 5),
+
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+              //   child: TextFormField(
+              //     keyboardType: TextInputType.number,
+              //     controller: otpController,
+              //     decoration: InputDecoration(
+              //       prefixIcon: Icon(Icons.numbers),
+              //       labelText: 'Masukkan kode OTP',
+              //       border: OutlineInputBorder(),
+              //     ),
+              //   ),
+              // ),
+
+              OtpTextField(
+                numberOfFields: 6,
+                borderColor: Color.fromRGBO(203, 164, 102, 1),
+                //set to true to show as box or false to show as dash
+                showFieldAsBox: true,
+                //runs when a code is typed in
+                onCodeChanged: (String code) {
+                  //handle validation or checks here
+                },
+                //runs when every textfield is filled
+                onSubmit: (String verificationCode) async {
+                  if (await myauth.verifyOTP(otp: verificationCode) == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("OTP berhasil diverifikasi"),
+                    ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LupaPageSandi(
+                          email: emailController.text,
+                        ),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("OTP tidak valid"),
+                    ));
+                  }
+                }, // end onSubmit
               ),
 
               SizedBox(height: 40.0),

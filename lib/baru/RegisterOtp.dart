@@ -1,6 +1,7 @@
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class RegisterOtp extends StatefulWidget {
   final String username;
@@ -38,49 +39,6 @@ class _RegisterOtpState extends State<RegisterOtp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Textfield dengan Prefix Icon dan Box Line
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: otp,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.security),
-                          labelText: 'Kode OTP',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () async {
-                        myauth.setConfig(
-                            appEmail: "me@rohitchouhan.com",
-                            appName: "Elades",
-                            userEmail: widget.email,
-                            otpLength: 6,
-                            otpType: OTPType.digitsOnly);
-                        if (await myauth.sendOTP() == true) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("OTP has been sent"),
-                          ));
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Oops, OTP send failed"),
-                          ));
-                        }
-                      },
-                      child: Text('Kirim Kode OTP'),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 40.0),
               Ink(
                 height: 50,
                 decoration: BoxDecoration(
@@ -94,29 +52,25 @@ class _RegisterOtpState extends State<RegisterOtp> {
                 ),
                 child: InkWell(
                   onTap: () async {
-                    if (await myauth.verifyOTP(otp: otp.text) == true) {
+                    myauth.setConfig(
+                        appEmail: "me@rohitchouhan.com",
+                        appName: "Elades",
+                        userEmail: widget.email,
+                        otpLength: 6,
+                        otpType: OTPType.digitsOnly);
+                    if (await myauth.sendOTP() == true) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("OTP is verified"),
+                        content: Text("OTP has been sent"),
                       ));
-                      // alert(context, "Silahkan Masuk", "Berhasil Mendaftar!",
-                      //     Icons.check, Colors.green);
-
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => LoginTerbaru(),
-                      //   ),
-                      // );
-                      _register();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Invalid OTP"),
+                        content: Text("Oops, OTP send failed"),
                       ));
                     }
                   },
                   child: Center(
                     child: Text(
-                      "Mendaftar",
+                      "Dapatkan kode OTP",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -125,6 +79,107 @@ class _RegisterOtpState extends State<RegisterOtp> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         child: TextFormField(
+              //           keyboardType: TextInputType.number,
+              //           controller: otp,
+              //           decoration: InputDecoration(
+              //             prefixIcon: Icon(Icons.security),
+              //             labelText: 'Kode OTP',
+              //             border: OutlineInputBorder(),
+              //           ),
+              //         ),
+              //       ),
+              //       SizedBox(width: 10),
+              //       ElevatedButton(
+              //         onPressed: () async {
+              //           myauth.setConfig(
+              //               appEmail: "me@rohitchouhan.com",
+              //               appName: "Elades",
+              //               userEmail: widget.email,
+              //               otpLength: 6,
+              //               otpType: OTPType.digitsOnly);
+              //           if (await myauth.sendOTP() == true) {
+              //             ScaffoldMessenger.of(context)
+              //                 .showSnackBar(const SnackBar(
+              //               content: Text("OTP has been sent"),
+              //             ));
+              //           } else {
+              //             ScaffoldMessenger.of(context)
+              //                 .showSnackBar(const SnackBar(
+              //               content: Text("Oops, OTP send failed"),
+              //             ));
+              //           }
+              //         },
+              //         child: Text('Kirim Kode OTP'),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              OtpTextField(
+                numberOfFields: 6,
+                borderColor: Color.fromRGBO(203, 164, 102, 1),
+                //set to true to show as box or false to show as dash
+                showFieldAsBox: true,
+                //runs when a code is typed in
+                onCodeChanged: (String code) {
+                  //handle validation or checks here
+                },
+                //runs when every textfield is filled
+                onSubmit: (String verificationCode) async {
+                    if (await myauth.verifyOTP(otp: verificationCode) == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("OTP is verified"),
+                      ));
+                      _register();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Invalid OTP"),
+                      ));
+                    }
+                  }, // end onSubmit
+              ),
+              SizedBox(height: 40.0),
+              // Ink(
+              //   height: 50,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10),
+              //     gradient: LinearGradient(
+              //       colors: [
+              //         Color.fromRGBO(203, 164, 102, 1),
+              //         Color.fromRGBO(203, 164, 102, 1),
+              //       ],
+              //     ),
+              //   ),
+              //   child: InkWell(
+              //     onTap: () async {
+              //       if (await myauth.verifyOTP(otp: otp.text) == true) {
+              //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              //           content: Text("OTP is verified"),
+              //         ));
+              //         _register();
+              //       } else {
+              //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              //           content: Text("Invalid OTP"),
+              //         ));
+              //       }
+              //     },
+              //     child: Center(
+              //       child: Text(
+              //         "Mendaftar",
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -136,7 +191,11 @@ class _RegisterOtpState extends State<RegisterOtp> {
     // Validasi form, misalnya memastikan semua field terisi dengan benar
     try {
       Map<String, dynamic> response = await apiService.registerBaru(
-          widget.username, widget.password, widget.email, widget.noTelp, widget.nama);
+          widget.username,
+          widget.password,
+          widget.email,
+          widget.noTelp,
+          widget.nama);
 
       if (response['status'] == 'success') {
         print('Registration successful');

@@ -183,7 +183,8 @@ class _LoginTerbaruState extends State<LoginTerbaru> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            loginGoogle(context);
+                            // loginGoogle(context);
+                            alert(context, "Sistem masih dalam perbaikan, gunakan daftar dengan email");
                           },
                           splashColor: Colors.white,
                           hoverColor: Colors.white,
@@ -363,6 +364,7 @@ void loginGoogle(BuildContext context) async {
     // Handle error, tampilkan pesan kesalahan atau lakukan tindakan lain sesuai kebutuhan.
   }
 }
+
 
 void alert(BuildContext context, String message) {
   showDialog(

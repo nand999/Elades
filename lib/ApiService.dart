@@ -12,13 +12,14 @@ class ApiService {
   // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
   // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://192.168.137.1:8080/elades/mobile";
-  final String imgUrl = "http://192.168.137.1:8080/elades/mobile/images/";
+  final String baseUrl = "http://172.16.106.180:8080/elades/mobile";
+  final String imgUrl = "http://172.16.106.180:8080/elades/mobile/images/";
   final String fotoProfilUrl =
-      "http://192.168.137.1:8080/elades/mobile/images/profil/";
+      "http://172.16.106.180:8080/elades/mobile/images/profil/";
   final String fotoKtpUrl =
-      "http://192.168.137.1:8080/elades/mobile/images/foto/ktp/";
-  final String server = "http://192.168.137.1:8080/api/MobileApi";
+      "http://172.16.106.180:8080/elades/mobile/images/foto/ktp/";
+
+  final String server = "http://172.16.106.180:8080/api/MobileApi";
 
   // ApiService(this.baseUrl);
 
