@@ -8,7 +8,8 @@ laporan.tanggal AS laporan_tanggal,
 laporan.status,
 laporan.alasan
 FROM pengajuan_surat
-LEFT JOIN laporan ON pengajuan_surat.id = laporan.id WHERE nama LIKE '%$keyword%'";
+LEFT JOIN laporan ON pengajuan_surat.id = laporan.id WHERE nama LIKE '%$keyword%'
+ORDER BY pengajuan_surat.id DESC";
 
 $result = $koneksi->query($query);
 

@@ -1,7 +1,7 @@
 <?php
 // upload.php
 
-$uploadDir = 'images/foto/ktp/'; // Sesuaikan dengan direktori penyimpanan gambar di server
+$uploadDir = '../foto_kelengkapan/'; // Sesuaikan dengan direktori penyimpanan gambar di server
 $filePath = $uploadDir . basename($_FILES['file']['name']); // Nama file
 
 if (!file_exists($uploadDir)) {

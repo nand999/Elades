@@ -8,20 +8,28 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiService {
-  // final String baseUrl = "http://172.17.202.137:8080/coba/mobile";
-  // final String imgUrl = "http://172.17.202.137:8080/coba/mobile/images/";
-  // final String fotoProfilUrl = "http://172.17.202.137:8080/coba/mobile/images/profil/";
 
-  final String baseUrl = "http://172.16.106.180:8080/elades/mobile";
-  final String imgUrl = "http://172.16.106.180:8080/elades/mobile/images/";
-  final String fotoProfilUrl =
-      "http://172.16.106.180:8080/elades/mobile/images/profil/";
+  //localhost
+  // final String baseUrl = "http://172.16.106.180:8080/B2/public/mobile";
+  // final String imgUrl = "http://172.16.106.180:8080/B2/public/mobile/images/";
+  // final String fotoProfilUrl =
+  //     "http://172.16.106.180:8080/B2/public//mobile/images/profil/";
+  // final String fotoKtpUrl =
+  //     "http://172.16.106.180:8080/B2/public//mobile/images/foto/ktp/";
+
+  //localhost laravel
+  final String baseUrl = "http://172.16.106.180:8080/B2/public/MobileAPI";
+  final String imgUrl = "http://172.16.106.180:8080/B2/public/data_foto_berita/";
+  // final String fotoProfilUrl =
+  //     "http://172.16.106.180:8080/B2/public/foto_profil/";
+        final String fotoProfilUrl =
+      "http://172.16.106.180:8080/B2/public/foto_profil/";
   final String fotoKtpUrl =
-      "http://172.16.106.180:8080/elades/mobile/images/foto/ktp/";
+      "http://172.16.106.180:8080/B2/public/foto_kelengkapan/";
 
-  final String server = "http://172.16.106.180:8080/api/MobileApi";
-
-  // ApiService(this.baseUrl);
+  
+    final String server = "http://172.16.106.180:8080/B2/public/mobileApi";
+    
 
   Future<Map<String, dynamic>> cekEmail(String email) async {
     try {
@@ -47,7 +55,7 @@ class ApiService {
     }
   }
 
-    Future<Map<String, dynamic>> cekUsername(String username) async {
+  Future<Map<String, dynamic>> cekUsername(String username) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/cek_username.php'),
@@ -231,7 +239,6 @@ class ApiService {
         'POST',
         Uri.parse('$baseUrl/upload.php'),
       );
-
       request.files.add(
         await http.MultipartFile.fromPath(
           'file',
@@ -239,9 +246,7 @@ class ApiService {
           filename: fileName,
         ),
       );
-
       var response = await request.send();
-
       if (response.statusCode == 200) {
         return true;
       } else {
