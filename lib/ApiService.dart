@@ -17,26 +17,26 @@ class ApiService {
   //     "http://172.16.106.180:8080/B2/public//mobile/images/foto/ktp/";
 
   //localhost laravel
-  // final String baseUrl = "http://172.16.106.180:8080/B2/public/MobileAPI";
-  // final String imgUrl =
-  //     "http://172.16.106.180:8080/B2/public/data_foto_berita/";
-  // // final String fotoProfilUrl =
-  // //     "http://172.16.106.180:8080/B2/public/foto_profil/";
-  // final String fotoProfilUrl =
-  //     "http://172.16.106.180:8080/B2/public/foto_profil/";
-  // final String fotoKtpUrl =
-  //     "http://172.16.106.180:8080/B2/public/foto_kelengkapan/";
-
-  //hosting
-  final String baseUrl = "http://elades.tifnganjuk.com/MobileAPI";
+  final String baseUrl = "http://172.16.106.180:8080/B2/public/MobileAPI";
   final String imgUrl =
-      "http://elades.tifnganjuk.com/data_foto_berita/";
+      "http://172.16.106.180:8080/B2/public/data_foto_berita/";
   // final String fotoProfilUrl =
   //     "http://172.16.106.180:8080/B2/public/foto_profil/";
   final String fotoProfilUrl =
-      "http://elades.tifnganjuk.com/foto_profil/";
+      "http://172.16.106.180:8080/B2/public/foto_profil/";
   final String fotoKtpUrl =
-      "http://elades.tifnganjuk.com/foto_kelengkapan/";
+      "http://172.16.106.180:8080/B2/public/foto_kelengkapan/";
+
+  //hosting
+  // final String baseUrl = "http://elades.tifnganjuk.com/MobileAPI";
+  // final String imgUrl =
+  //     "http://elades.tifnganjuk.com/data_foto_berita/";
+  // // final String fotoProfilUrl =
+  // //     "http://172.16.106.180:8080/B2/public/foto_profil/";
+  // final String fotoProfilUrl =
+  //     "http://elades.tifnganjuk.com/foto_profil/";
+  // final String fotoKtpUrl =
+  //     "http://elades.tifnganjuk.com/foto_kelengkapan/";
 
 
   final String server = "http://elades.tifnganjuk.com/api/MobileAPI/";

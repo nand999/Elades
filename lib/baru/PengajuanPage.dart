@@ -219,7 +219,7 @@ class _PengajuanPageState extends State<PengajuanPage> {
                                                         fontSize: 18.0),
                                                   )
                                                 : product['kode_surat'] ==
-                                                        "surat_mati"
+                                                        "surat_kematian"
                                                     ? Text(
                                                         "Surat kematian",
                                                         style: TextStyle(
