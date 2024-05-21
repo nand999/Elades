@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ApiService {
-
   //localhost
   // final String baseUrl = "http://172.16.106.180:8080/B2/public/mobile";
   // final String imgUrl = "http://172.16.106.180:8080/B2/public/mobile/images/";
@@ -18,18 +17,29 @@ class ApiService {
   //     "http://172.16.106.180:8080/B2/public//mobile/images/foto/ktp/";
 
   //localhost laravel
-  final String baseUrl = "http://172.16.106.180:8080/B2/public/MobileAPI";
-  final String imgUrl = "http://172.16.106.180:8080/B2/public/data_foto_berita/";
+  // final String baseUrl = "http://172.16.106.180:8080/B2/public/MobileAPI";
+  // final String imgUrl =
+  //     "http://172.16.106.180:8080/B2/public/data_foto_berita/";
+  // // final String fotoProfilUrl =
+  // //     "http://172.16.106.180:8080/B2/public/foto_profil/";
   // final String fotoProfilUrl =
   //     "http://172.16.106.180:8080/B2/public/foto_profil/";
-        final String fotoProfilUrl =
-      "http://172.16.106.180:8080/B2/public/foto_profil/";
-  final String fotoKtpUrl =
-      "http://172.16.106.180:8080/B2/public/foto_kelengkapan/";
+  // final String fotoKtpUrl =
+  //     "http://172.16.106.180:8080/B2/public/foto_kelengkapan/";
 
-  
-    final String server = "http://172.16.106.180:8080/B2/public/mobileApi";
-    
+  //hosting
+  final String baseUrl = "http://elades.tifnganjuk.com/MobileAPI";
+  final String imgUrl =
+      "http://elades.tifnganjuk.com/data_foto_berita/";
+  // final String fotoProfilUrl =
+  //     "http://172.16.106.180:8080/B2/public/foto_profil/";
+  final String fotoProfilUrl =
+      "http://elades.tifnganjuk.com/foto_profil/";
+  final String fotoKtpUrl =
+      "http://elades.tifnganjuk.com/foto_kelengkapan/";
+
+
+  final String server = "http://elades.tifnganjuk.com/api/MobileAPI/";
 
   Future<Map<String, dynamic>> cekEmail(String email) async {
     try {
