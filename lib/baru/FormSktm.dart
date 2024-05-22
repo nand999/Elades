@@ -155,7 +155,6 @@ class _FormSktmState extends State<FormSktm> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 )),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
@@ -167,7 +166,6 @@ class _FormSktmState extends State<FormSktm> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
                 child: Text(
@@ -175,7 +173,6 @@ class _FormSktmState extends State<FormSktm> {
                   style: TextStyle(fontSize: 15),
                 ),
               ),
-
               Row(
                 children: [
                   Expanded(
@@ -201,7 +198,6 @@ class _FormSktmState extends State<FormSktm> {
                               initialDate: DateTime.now(),
                               firstDate: DateTime(1950),
                               lastDate: DateTime(2999));
-
                           if (pickeddateIb != null) {
                             setState(() {
                               tglIbuController.text =
@@ -221,7 +217,6 @@ class _FormSktmState extends State<FormSktm> {
                   ),
                 ],
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(
@@ -233,7 +228,6 @@ class _FormSktmState extends State<FormSktm> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: TextFormField(

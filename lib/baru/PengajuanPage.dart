@@ -41,8 +41,10 @@ class _PengajuanPageState extends State<PengajuanPage> {
   }
 
   Future<void> searchPengajuan() async {
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
     setState(() {
-      products = apiService.searchPengajuan(searchController.text);
+      products = apiService.searchPengajuan(searchController.text, user!.username);
+      print("usernya sekarang adalah " + user!.username);
     });
   }
 

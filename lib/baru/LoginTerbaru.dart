@@ -280,7 +280,6 @@ class _LoginTerbaruState extends State<LoginTerbaru> {
         ),
       ),
     );
-    ;
   }
 }
 

@@ -65,7 +65,6 @@ class _NotifPage2State extends State<NotifPage2> {
                   } else if (laporan[index]['status'] == 'Selesai') {
                     statusColor = Colors.green;
                   }
-
                   return Card(
                     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: ListTile(

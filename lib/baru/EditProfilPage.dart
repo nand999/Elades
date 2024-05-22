@@ -44,7 +44,6 @@ class _FormEditProfilState extends State<FormEditProfil> {
   Widget build(BuildContext context) {
     // Tetapkan variabel user di dalam metode build jika diperlukan
     UserModelBaru? user = context.watch<UserProvider>().userBaru;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profil'),

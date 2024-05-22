@@ -21,6 +21,36 @@ class _FormSktmFotoState extends State<FormSkckFoto> {
   File? _image1;
 
   final picker = ImagePicker();
+  ApiService apiService = ApiService();
+  String? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    userId = user!.username;
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image1 == null) {
+      // Tampilkan pesan bahwa gambar belum dipilih
+      return;
+    }
+    final String apiUrl = apiService.baseUrl + "/uploadKtpSkck.php";
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.fields['userId'] = userId.toString();
+    if (_image1 != null) {
+      String fileName = _image1!.path.split('/').last;
+      var image = await http.MultipartFile.fromPath('image', _image1!.path);
+      request.files.add(image);
+    }
+    var streamedResponse = await request.send();
+    if (streamedResponse.statusCode == 200) {
+      print('Gambar berhasil diunggah');
+    } else {
+      print('Gagal mengunggah gambar: ${streamedResponse.reasonPhrase}');
+    }
+  }
 
   Future getImage(int containerIndex, ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
@@ -103,8 +133,10 @@ class _FormSktmFotoState extends State<FormSkckFoto> {
                           Map<String, dynamic> result = await ApiService()
                               .updateKtpSkck(userId, _image1!);
 
+                              _uploadImage();
+
                           // Lakukan penanganan hasil jika diperlukan
-                          print('Update successful: $result');
+                          // print('Update successful: $result');
 
                           // Tambahkan navigasi atau tindakan lain setelah berhasil diunggah
                           Navigator.pushReplacement(

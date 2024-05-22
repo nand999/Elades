@@ -9,30 +9,32 @@ import 'package:uuid/uuid.dart';
 
 class ApiService {
   //localhost
-  // final String baseUrl = "http://172.16.106.180:8080/B2/public/mobile";
-  // final String imgUrl = "http://172.16.106.180:8080/B2/public/mobile/images/";
-  // final String fotoProfilUrl =
-  //     "http://172.16.106.180:8080/B2/public//mobile/images/profil/";
-  // final String fotoKtpUrl =
-  //     "http://172.16.106.180:8080/B2/public//mobile/images/foto/ktp/";
+  final String baseUrl = "http://192.168.1.12:8080/B2/public/MobileAPI/";
+  final String imgUrl = "http://192.168.1.12:8080/B2/public/data_foto_berita/";
+  final String fotoProfilUrl =
+      "http://192.168.1.12:8080/B2/public/foto_profil/";
+
+  final String fotoKtpUrl =
+      "http://192.168.1.12:8080/B2/public/mobile/images/foto/ktp/";
 
   //localhost laravel
-  final String baseUrl = "http://172.16.106.180:8080/B2/public/MobileAPI";
-  final String imgUrl =
-      "http://172.16.106.180:8080/B2/public/data_foto_berita/";
+  // final String baseUrl = "http://192.168.1.12:8080/B2/public/MobileAPI";
+  // final String imgUrl =
+  //     "http://192.168.1.12:8080/B2/public/data_foto_berita/";
+  // // final String fotoProfilUrl =
+  // //     "http://192.168.1.12:8080/B2/public/foto_profil/";
   // final String fotoProfilUrl =
-  //     "http://172.16.106.180:8080/B2/public/foto_profil/";
-  final String fotoProfilUrl =
-      "http://172.16.106.180:8080/B2/public/foto_profil/";
-  final String fotoKtpUrl =
-      "http://172.16.106.180:8080/B2/public/foto_kelengkapan/";
+  //     "http://192.168.1.12:8080/B2/public/foto_profil/";
+  // final String fotoKtpUrl =
+  //     "http://192.168.1.12:8080/B2/public/foto_kelengkapan/";
 
   //hosting
+  // final String BaseUrlLama = "http://192.168.1.12/elades/mobile";
   // final String baseUrl = "http://elades.tifnganjuk.com/MobileAPI";
   // final String imgUrl =
   //     "http://elades.tifnganjuk.com/data_foto_berita/";
   // // final String fotoProfilUrl =
-  // //     "http://172.16.106.180:8080/B2/public/foto_profil/";
+  // //     "http://192.168.1.12:8080/B2/public/foto_profil/";
   // final String fotoProfilUrl =
   //     "http://elades.tifnganjuk.com/foto_profil/";
   // final String fotoKtpUrl =
@@ -40,6 +42,54 @@ class ApiService {
 
 
   final String server = "http://elades.tifnganjuk.com/api/MobileAPI/";
+
+    Future<Map<String, dynamic>> setOTP(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$server/kirimkodeotp'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception('Login failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during login: $e');
+    }
+  }
+
+
+    Future<Map<String, dynamic>> cekOTP(String email, String kode_otp) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$server/cekkodeotp'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'kode_otp': kode_otp
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception('Login failed. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error during login: $e');
+    }
+  }
 
   Future<Map<String, dynamic>> cekEmail(String email) async {
     try {
@@ -119,7 +169,7 @@ class ApiService {
   Future<Map<String, dynamic>> login(String username, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/login.php'),
+        Uri.parse('$server/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -269,6 +319,33 @@ class ApiService {
     }
   }
 
+    // Tambahkan metode untuk mengunggah foto profil
+  Future<bool> uploadFotoProfilBaru(File image, String fileName) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$server/upload_foto_profil'),
+      );
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'file',
+          image.path,
+          filename: fileName,
+        ),
+      );
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Failed to upload image. Server error: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      return false;
+    }
+  }
+
   Future<Map<String, dynamic>> updateFotoProfil(int userId, File image) async {
     try {
       String fileName = Uuid().v4() + ".jpg";
@@ -282,6 +359,66 @@ class ApiService {
           },
           body: jsonEncode(<String, dynamic>{
             'id_user': userId,
+            'foto_profil': fileName,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          return responseData;
+        } else {
+          throw Exception(
+              'Failed to update foto_profil. Server error: ${response.statusCode}');
+        }
+      } else {
+        throw Exception('Failed to upload foto_profil image.');
+      }
+    } catch (e) {
+      throw Exception('Error updating foto_profil: $e');
+    }
+  }
+
+    Future<Map<String, dynamic>> uploadProfileImage(String username, File image) async {
+    try {
+      String uploadUrl = '$baseUrl/upload.php';
+
+      // Create a multipart request
+      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
+      request.fields['userId'] = username;
+      request.files.add(await http.MultipartFile.fromPath('image', image.path));
+
+      // Send the request
+      var streamedResponse = await request.send();
+
+      // Get the response
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        throw Exception(
+            'Failed to upload profile image. Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error uploading profile image: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> updateFotoProfilBaruBaru(
+      String userId, File image) async {
+    try {
+      String fileName = Uuid().v4() + ".jpg";
+      bool uploadSuccess = await uploadFotoProfilBaru(image, fileName);
+
+      if (uploadSuccess) {
+        final response = await http.post(
+          Uri.parse('$baseUrl/update_foto_profil.php'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'username': userId,
             'foto_profil': fileName,
           }),
         );
@@ -672,10 +809,10 @@ class ApiService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> searchPengajuan(String keyword) async {
+  Future<List<Map<String, dynamic>>> searchPengajuan(String keyword, String username) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/search_pengajuan.php?keyword=$keyword'),
+        Uri.parse('$baseUrl/search_pengajuan.php?keyword=$keyword&username=$username'),
       );
 
       if (response.statusCode == 200) {

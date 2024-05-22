@@ -1,3 +1,4 @@
+import 'package:elades/ApiService.dart';
 import 'package:elades/baru/LoginTerbaru.dart';
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
@@ -67,6 +68,13 @@ class _RegisterOtpState extends State<RegisterOtp> {
                         content: Text("Oops, OTP send failed"),
                       ));
                     }
+
+                    // try{
+                    //   Map<String, dynamic> result = await ApiService()
+                    //           .setOTP(widget.email);
+                    // }catch(e){
+                    //   print("Otp Laravel gagal");
+                    // }
                   },
                   child: Center(
                     child: Text(

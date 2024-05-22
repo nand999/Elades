@@ -97,20 +97,6 @@ class _LupaPageState extends State<LupaPage> {
                 ),
               ),
               SizedBox(height: 5),
-
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              //   child: TextFormField(
-              //     keyboardType: TextInputType.number,
-              //     controller: otpController,
-              //     decoration: InputDecoration(
-              //       prefixIcon: Icon(Icons.numbers),
-              //       labelText: 'Masukkan kode OTP',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
-
               OtpTextField(
                 numberOfFields: 6,
                 borderColor: Color.fromRGBO(203, 164, 102, 1),

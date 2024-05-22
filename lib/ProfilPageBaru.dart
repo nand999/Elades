@@ -68,39 +68,6 @@ class _ProfilPageBaruState extends State<ProfilPageBaru> {
     }
   }
 
-  //lama
-
-  // Future<void> _changePhoto() async {
-  //   await getImage();
-  //   if (image != null) {
-  //     try {
-  //       await updateFotoProfil(image!);
-  //       setState(() {
-
-  //       });
-  //     } catch (e) {
-  //       // Tampilkan pesan kesalahan jika gagal mengupdate foto profil
-  //       showDialog(
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return AlertDialog(
-  //             title: Text('Error'),
-  //             content: Text('Failed to update foto profil.'),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: Text('Close'),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     }
-  //   }
-  // }
-
   Future<void> updateFotoProfil(File image) async {
     UserModel? user = context.read<UserProvider>().user;
     if (user != null) {
@@ -127,24 +94,6 @@ class _ProfilPageBaruState extends State<ProfilPageBaru> {
     }
   }
 
-  //    lama 2
-  // Future<void> updateFotoProfil(File image) async {
-  //   UserModel? user = context.read<UserProvider>().user;
-  //   if (user != null) {
-  //     try {
-  //       bool uploadSuccess = await uploadImage(image);
-
-  //       if (uploadSuccess) {
-  //         print('Update foto_profil success '+ user.id.toString());
-  //         // Lakukan tindakan tambahan jika diperlukan setelah berhasil memperbarui foto profil
-  //       } else {
-  //         print('Failed to update foto_profil');
-  //       }
-  //     } catch (e) {
-  //       print('Error updating foto_profil: $e');
-  //     }
-  //   }
-  // }
 
   Future<bool> uploadImage(File image) async {
     try {

@@ -136,6 +136,34 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     }
   }
 
+    Future<bool> uploadImageBaru(String username, File image) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(apiService.baseUrl + '/upload.php'),
+      );
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          image.path,
+          filename:
+              Uuid().v4() + ".jpg", // Generate a random filename using uuid
+        ),
+      );
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        // Gambar berhasil diunggah. Sekarang perbarui foto_profil di tabel pengguna.
+        return true;
+      } else {
+        print('Failed to upload image. Server error: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserModelBaru? user = context.watch<UserProvider>().userBaru;
