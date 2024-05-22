@@ -9,13 +9,13 @@ import 'package:uuid/uuid.dart';
 
 class ApiService {
   //localhost
-  final String baseUrl = "http://192.168.1.12:8080/B2/public/MobileAPI/";
-  final String imgUrl = "http://192.168.1.12:8080/B2/public/data_foto_berita/";
-  final String fotoProfilUrl =
-      "http://192.168.1.12:8080/B2/public/foto_profil/";
+  // final String baseUrl = "http://192.168.1.12:8080/B2/public/MobileAPI/";
+  // final String imgUrl = "http://192.168.1.12:8080/B2/public/data_foto_berita/";
+  // final String fotoProfilUrl =
+  //     "http://192.168.1.12:8080/B2/public/foto_profil/";
 
-  final String fotoKtpUrl =
-      "http://192.168.1.12:8080/B2/public/mobile/images/foto/ktp/";
+  // final String fotoKtpUrl =
+  //     "http://192.168.1.12:8080/B2/public/mobile/images/foto/ktp/";
 
   //localhost laravel
   // final String baseUrl = "http://192.168.1.12:8080/B2/public/MobileAPI";
@@ -29,16 +29,16 @@ class ApiService {
   //     "http://192.168.1.12:8080/B2/public/foto_kelengkapan/";
 
   //hosting
-  // final String BaseUrlLama = "http://192.168.1.12/elades/mobile";
-  // final String baseUrl = "http://elades.tifnganjuk.com/MobileAPI";
-  // final String imgUrl =
-  //     "http://elades.tifnganjuk.com/data_foto_berita/";
-  // // final String fotoProfilUrl =
-  // //     "http://192.168.1.12:8080/B2/public/foto_profil/";
+  final String BaseUrlLama = "http://192.168.1.12/elades/mobile";
+  final String baseUrl = "http://elades.tifnganjuk.com/MobileAPI";
+  final String imgUrl =
+      "http://elades.tifnganjuk.com/data_foto_berita/";
   // final String fotoProfilUrl =
-  //     "http://elades.tifnganjuk.com/foto_profil/";
-  // final String fotoKtpUrl =
-  //     "http://elades.tifnganjuk.com/foto_kelengkapan/";
+  //     "http://192.168.1.12:8080/B2/public/foto_profil/";
+  final String fotoProfilUrl =
+      "http://elades.tifnganjuk.com/foto_profil/";
+  final String fotoKtpUrl =
+      "http://elades.tifnganjuk.com/foto_kelengkapan/";
 
 
   final String server = "http://elades.tifnganjuk.com/api/MobileAPI/";

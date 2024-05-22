@@ -31,6 +31,8 @@ class _FormSktmFotoState extends State<FormSkckFoto> {
     userId = user!.username;
   }
 
+
+  //method _uploadimage dari alvian
   Future<void> _uploadImage() async {
     if (_image1 == null) {
       // Tampilkan pesan bahwa gambar belum dipilih

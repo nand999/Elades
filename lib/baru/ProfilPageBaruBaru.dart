@@ -22,7 +22,15 @@ class ProfilPageBaruBaru extends StatefulWidget {
 
 class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
   ApiService apiService = ApiService();
-  File? image;
+  File? image1;
+  String? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    userId = user!.username;
+  }
 
   Future getImage() async {
     final ImagePicker _picker = ImagePicker();
@@ -31,7 +39,7 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
 
     // Periksa apakah pengguna memilih foto atau membatalkan
     if (imagepicked != null) {
-      image = File(imagepicked.path);
+      image1 = File(imagepicked.path);
       setState(() {});
     } else {
       // Pengguna membatalkan pemilihan, tidak ada perubahan yang perlu di-handle
@@ -40,9 +48,11 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
 
   Future<void> _changePhoto() async {
     await getImage();
-    if (image != null) {
+    if (image1 != null) {
       try {
-        await updateFotoProfil(image!);
+        await updateFotoProfil(image1!);
+        // _uploadImage();
+        
         setState(() {
           // Tambahkan logika pembaruan data user setelah foto profil berhasil diperbarui
           UserModelBaru? updatedUser = context.read<UserProvider>().userBaru;
@@ -136,7 +146,7 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     }
   }
 
-    Future<bool> uploadImageBaru(String username, File image) async {
+  Future<bool> uploadImageBaru(String username, File image) async {
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -161,6 +171,29 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     } catch (e) {
       print('Error uploading image: $e');
       return false;
+    }
+  }
+
+
+  // method uploadImage dari alvian
+  Future<void> _uploadImage() async {
+    if (image1 == null) {
+      // Tampilkan pesan bahwa gambar belum dipilih
+      return;
+    }
+    final String apiUrl = apiService.baseUrl + '/upload_pp.php';
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.fields['username'] = userId!;
+    if (image1 != null) {
+      String fileName = image1!.path.split('/').last;
+      var image = await http.MultipartFile.fromPath('image', image1!.path);
+      request.files.add(image);
+    }
+    var streamedResponse = await request.send();
+    if (streamedResponse.statusCode == 200) {
+      print('Gambar berhasil diunggah');
+    } else {
+      print('Gagal mengunggah gambar: ${streamedResponse.reasonPhrase}');
     }
   }
 
@@ -237,6 +270,7 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
                         icon: Icon(Icons.edit, color: Colors.white),
                         onPressed: () async {
                           await _changePhoto();
+                          // _uploadImage();
                         },
                       ),
                     ),
@@ -477,8 +511,7 @@ class UserInfoCard extends StatelessWidget {
                                     Text("Konfirmasi"),
                                   ],
                                 ),
-                                content:
-                                    Text("Yakin untuk keluar?"),
+                                content: Text("Yakin untuk keluar?"),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
