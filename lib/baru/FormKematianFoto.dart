@@ -8,7 +8,9 @@ import 'package:elades/baru/FormIzin.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
+// import 'package:uuid/uuid.dart';
+// import 'package:path/path.dart' as path; // Tambahkan paket path
+// import 'package:mime/mime.dart';
 
 class FormKematianFoto extends StatefulWidget {
   const FormKematianFoto({Key? key}) : super(key: key);
@@ -19,8 +21,9 @@ class FormKematianFoto extends StatefulWidget {
 
 class _FormKematianFotoState extends State<FormKematianFoto> {
   File? _image1;
-
+  ApiService apiService = new ApiService();
   final picker = ImagePicker();
+  String? userId;
 
   Future getImage(int containerIndex, ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
@@ -34,6 +37,58 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
         print('No image selected.');
       }
     });
+  }
+
+  //   Future<void> _uploadImage(File image, String userId) async {
+  //   String fileName = path.basename(image.path);
+  //   String uploadUrl = apiService.baseUrl +'/uploadKtpKematian.php'; // Ganti dengan URL server Anda
+
+  //   var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
+  //   request.fields['user_id'] = userId;
+  //   request.fields['action'] = 'upload_foto_kematian';
+  //   request.files.add(await http.MultipartFile.fromPath(
+  //     'image',
+  //     image.path,
+  //     contentType: MediaType('image', mime(image.path)!.split('/')[1]),
+  //   ));
+
+  //   var response = await request.send();
+
+  //   if (response.statusCode == 200) {
+  //     print('Image uploaded successfully');
+  //   } else {
+  //     print('Failed to upload image');
+  //   }
+  // }
+
+    @override
+  void initState() {
+    super.initState();
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    userId = user!.username;
+  }
+
+
+  //method _uploadimage dari alvian
+  Future<void> _uploadImage() async {
+    if (_image1 == null) {
+      // Tampilkan pesan bahwa gambar belum dipilih
+      return;
+    }
+    final String apiUrl = apiService.baseUrl + "/uploadKtpKematian.php";
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.fields['userId'] = userId.toString();
+    if (_image1 != null) {
+      String fileName = _image1!.path.split('/').last;
+      var image = await http.MultipartFile.fromPath('image', _image1!.path);
+      request.files.add(image);
+    }
+    var streamedResponse = await request.send();
+    if (streamedResponse.statusCode == 200) {
+      print('Gambar berhasil diunggah');
+    } else {
+      print('Gagal mengunggah gambar: ${streamedResponse.reasonPhrase}');
+    }
   }
 
   @override
@@ -99,12 +154,13 @@ class _FormKematianFotoState extends State<FormKematianFoto> {
                           // Ganti 'userId' dengan nilai yang sesuai
                           String userId = user!.username;
 
-                          // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
-                          Map<String, dynamic> result = await ApiService()
-                              .updateKtpMati(userId, _image1!);
+                          // // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
+                          // Map<String, dynamic> result = await ApiService()
+                          //     .updateKtpMati(userId, _image1!);
 
-                          // Lakukan penanganan hasil jika diperlukan
-                          print('Update successful: $result');
+                          // // Lakukan penanganan hasil jika diperlukan
+                          // print('Update successful: $result');
+                          _uploadImage();
 
                           // Tambahkan navigasi atau tindakan lain setelah berhasil diunggah
                           Navigator.pushReplacement(

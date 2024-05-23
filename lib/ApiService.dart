@@ -169,7 +169,8 @@ class ApiService {
   Future<Map<String, dynamic>> login(String username, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$server/login'),
+        // Uri.parse('$server/login'),
+        Uri.parse('$baseUrl/login.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -1121,10 +1122,11 @@ class ApiService {
       String tanggal_lahir,
       String pekerjaan,
       String jumlah_penghasilan,
-      String kegunaan_surat) async {
+      String kegunaan_surat,
+      String foto_ktp) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/insert_penghasilan.php'),
+        Uri.parse('$baseUrl/insert_penghasilan_baru1.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -1138,7 +1140,8 @@ class ApiService {
           'pekerjaan': pekerjaan,
           'alamat': Alamat,
           'jumlah_penghasilan': jumlah_penghasilan,
-          'kegunaan_surat': kegunaan_surat
+          'kegunaan_surat': kegunaan_surat,
+          'foto_ktp': foto_ktp
         }),
       );
 

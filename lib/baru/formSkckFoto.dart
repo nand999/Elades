@@ -132,8 +132,8 @@ class _FormSktmFotoState extends State<FormSkckFoto> {
                           String userId = user!.username;
 
                           // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
-                          Map<String, dynamic> result = await ApiService()
-                              .updateKtpSkck(userId, _image1!);
+                          // Map<String, dynamic> result = await ApiService()
+                          //     .updateKtpSkck(userId, _image1!);
 
                               _uploadImage();
 

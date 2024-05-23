@@ -25,13 +25,6 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
   File? image1;
   String? userId;
 
-  @override
-  void initState() {
-    super.initState();
-    UserModelBaru? user = context.read<UserProvider>().userBaru;
-    userId = user!.username;
-  }
-
   Future getImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? imagepicked =
@@ -50,9 +43,10 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     await getImage();
     if (image1 != null) {
       try {
-        await updateFotoProfil(image1!);
-        // _uploadImage();
-        
+        // await updateFotoProfil(image1!);
+        _uploadImage();
+        alert(context, "Login ulang untuk memuat foto profil baru");
+
         setState(() {
           // Tambahkan logika pembaruan data user setelah foto profil berhasil diperbarui
           UserModelBaru? updatedUser = context.read<UserProvider>().userBaru;
@@ -174,16 +168,23 @@ class _ProfilPageBaruBaruState extends State<ProfilPageBaruBaru> {
     }
   }
 
-
   // method uploadImage dari alvian
+  @override
+  void initState() {
+    super.initState();
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    userId = user!.username;
+  }
+
+  //method _uploadimage dari alvian
   Future<void> _uploadImage() async {
     if (image1 == null) {
       // Tampilkan pesan bahwa gambar belum dipilih
       return;
     }
-    final String apiUrl = apiService.baseUrl + '/upload_pp.php';
+    final String apiUrl = apiService.baseUrl + "/uploadPpBaru.php";
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    request.fields['username'] = userId!;
+    request.fields['userId'] = userId.toString();
     if (image1 != null) {
       String fileName = image1!.path.split('/').last;
       var image = await http.MultipartFile.fromPath('image', image1!.path);
@@ -580,6 +581,40 @@ class UserInfoCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  AlertDialog alertCoy() {
+        return AlertDialog(
+          title: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.redAccent,
+                  ),
+                  Icon(
+                    Icons.error,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Text("Harap login ulang"),
+            ],
+          ),
+          content: Text("Login ulang untuk memuat foto profil baru"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                return;
+              },
+              child: Text("Ya"),
+            ),
+          ],
+        );
   }
 }
 

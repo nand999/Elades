@@ -19,8 +19,9 @@ class FormIzinFoto extends StatefulWidget {
 
 class _FormIzinFotoState extends State<FormIzinFoto> {
   File? _image1;
-
   final picker = ImagePicker();
+  ApiService apiService = ApiService();
+  String? userId;
 
   Future getImage(int containerIndex, ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
@@ -37,11 +38,43 @@ class _FormIzinFotoState extends State<FormIzinFoto> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    userId = user!.username;
+  }
+
+  //method _uploadimage dari alvian
+  Future<void> _uploadImage() async {
+    if (_image1 == null) {
+      // Tampilkan pesan bahwa gambar belum dipilih
+      return;
+    }
+    final String apiUrl = apiService.baseUrl + "/uploadKtpIzin.php";
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.fields['userId'] = userId.toString();
+    if (_image1 != null) {
+      String fileName = _image1!.path.split('/').last;
+      var image = await http.MultipartFile.fromPath('image', _image1!.path);
+      request.files.add(image);
+    }
+    var streamedResponse = await request.send();
+    if (streamedResponse.statusCode == 200) {
+      print('Gambar berhasil diunggah');
+    } else {
+      print('Gagal mengunggah gambar: ${streamedResponse.reasonPhrase}');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     UserModelBaru? user = context.read<UserProvider>().userBaru;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Unggah foto KTP anda", style: TextStyle(color: Colors.white),),
+        title: Text(
+          "Unggah foto KTP anda",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Color(0xff2e3654),
       ),
       body: Padding(
@@ -96,12 +129,14 @@ class _FormIzinFotoState extends State<FormIzinFoto> {
                           // Ganti 'userId' dengan nilai yang sesuai
                           String userId = user!.username;
 
-                          // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
-                          Map<String, dynamic> result =
-                              await ApiService().updateKtp(userId, _image1!);
+                          // // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
+                          // Map<String, dynamic> result =
+                          //     await ApiService().updateKtp(userId, _image1!);
 
-                          // Lakukan penanganan hasil jika diperlukan
-                          print('Update successful: $result');
+                          // // Lakukan penanganan hasil jika diperlukan
+                          // print('Update successful: $result');
+
+                          _uploadImage();
 
                           // Tambahkan navigasi atau tindakan lain setelah berhasil diunggah
                           Navigator.pushReplacement(
@@ -182,7 +217,8 @@ class _FormIzinFotoState extends State<FormIzinFoto> {
       },
     );
   }
-      void alert(BuildContext context, String message) {
+
+  void alert(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

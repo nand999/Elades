@@ -6,6 +6,7 @@ import 'package:elades/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class FormSktmFoto extends StatefulWidget {
   const FormSktmFoto({Key? key}) : super(key: key);
@@ -16,7 +17,8 @@ class FormSktmFoto extends StatefulWidget {
 
 class _FormSktmFotoState extends State<FormSktmFoto> {
   File? _image1;
-
+  ApiService apiService = ApiService();
+  String? userId;
   final picker = ImagePicker();
 
   Future getImage(int containerIndex, ImageSource source) async {
@@ -31,6 +33,36 @@ class _FormSktmFotoState extends State<FormSktmFoto> {
         print('No image selected.');
       }
     });
+  }
+
+      @override
+  void initState() {
+    super.initState();
+    UserModelBaru? user = context.read<UserProvider>().userBaru;
+    userId = user!.username;
+  }
+
+
+  //method _uploadimage dari alvian
+  Future<void> _uploadImage() async {
+    if (_image1 == null) {
+      // Tampilkan pesan bahwa gambar belum dipilih
+      return;
+    }
+    final String apiUrl = apiService.baseUrl + "/uploadKkSktm.php";
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.fields['userId'] = userId.toString();
+    if (_image1 != null) {
+      String fileName = _image1!.path.split('/').last;
+      var image = await http.MultipartFile.fromPath('image', _image1!.path);
+      request.files.add(image);
+    }
+    var streamedResponse = await request.send();
+    if (streamedResponse.statusCode == 200) {
+      print('Gambar berhasil diunggah');
+    } else {
+      print('Gagal mengunggah gambar: ${streamedResponse.reasonPhrase}');
+    }
   }
 
   @override
@@ -97,12 +129,13 @@ class _FormSktmFotoState extends State<FormSktmFoto> {
                           String userId = user!.username;
 
                           // Panggil method updateKtp untuk mengunggah dan memperbarui gambar KTP
-                          Map<String, dynamic> result =
-                              await ApiService().updateKkSktm(userId, _image1!);
+                          // Map<String, dynamic> result =
+                          //     await ApiService().updateKkSktm(userId, _image1!);
 
-                          // Lakukan penanganan hasil jika diperlukan
-                          print('Update successful: $result');
+                          // // Lakukan penanganan hasil jika diperlukan
+                          // print('Update successful: $result');
 
+                          _uploadImage();
                           // Tambahkan navigasi atau tindakan lain setelah berhasil diunggah
                           Navigator.pushReplacement(
                             context,

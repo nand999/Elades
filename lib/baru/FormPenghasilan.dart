@@ -295,7 +295,8 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
             tglLahir,
             krj,
             jumlah,
-            kegunaan);
+            kegunaan,
+            "Belum ada foto");
 
         print('Response from server: $response'); // Cetak respons ke konsol
 

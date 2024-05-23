@@ -27,7 +27,7 @@ class _NotifPage2State extends State<NotifPage2> {
     final String username = user!.username;
     try {
       final response = await http.get(Uri.parse(
-          apiService.baseUrl + '/get_notifikasi.php?username=$username'));
+          apiService.baseUrl + '/get_notifikasi_baru.php?username=$username'));
 
       if (response.statusCode == 200) {
         setState(() {
