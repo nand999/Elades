@@ -93,8 +93,7 @@ class DetailPenghasilan extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          "Alasan Ditolak: " +
-                              productDetails['alasan'].toString(),
+                          productDetails['alasan'].toString(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,

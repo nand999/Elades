@@ -223,7 +223,8 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      _kirimPenghasilan(context);
+                      alertBox(context, "Apakah semua data sudah benar?", "Pastikan semua data benar", Icons.warning, Colors.yellow, () { _kirimPenghasilan(context);}, () { return;});
+                      // _kirimPenghasilan(context);
                     },
                     splashColor: Color(0xff2e3654),
                     hoverColor: Color(0xff2e3654),
@@ -295,8 +296,7 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
             tglLahir,
             krj,
             jumlah,
-            kegunaan,
-            "Belum ada foto");
+            kegunaan);
 
         print('Response from server: $response'); // Cetak respons ke konsol
 
@@ -328,4 +328,103 @@ class _FormPenghasilanState extends State<FormPenghasilan> {
       }
     }
   }
+    void alertBox(BuildContext context, String message, String title, IconData icon,
+    Color color, VoidCallback onYes, VoidCallback onNo) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: contentBox1(context, message, title, icon, color, onYes, onNo),
+      );
+    },
+  );
+}
+
+Widget contentBox1(BuildContext context, String message, String title,
+    IconData icon, Color color, VoidCallback onYes, VoidCallback onNo) {
+  return Stack(
+    children: <Widget>[
+      Container(
+        padding: EdgeInsets.only(
+          left: 20,
+          top: 45,
+          right: 20,
+          bottom: 20,
+        ),
+        margin: EdgeInsets.only(top: 45),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(0, 10),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 15),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 22),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  onPressed: onNo,
+                  child: Text(
+                    'TIDAK',
+                    style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                  ),
+                ),
+                TextButton(
+                  onPressed: onYes,
+                  child: Text(
+                    'YA',
+                    style: TextStyle(color: Color.fromRGBO(203, 164, 102, 1)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        top: 0,
+        left: 20,
+        right: 20,
+        child: CircleAvatar(
+          backgroundColor: color,
+          radius: 30,
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
+      ),
+    ],
+  );
+}
 }

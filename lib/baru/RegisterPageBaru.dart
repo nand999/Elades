@@ -159,8 +159,8 @@ class _RegisterPageBaruState extends State<RegisterPageBaru> {
                     } else if (usernameController.text.contains(" ")) {
                       alert(context, "Username tidak boleh mengandung spasi",
                           "Gagal mendaftar!", Icons.error, Colors.red);
-                    } else if (usernameController.text.length > 8) {
-                      alert(context, "Username maksimal 8 karakter",
+                    } else if (usernameController.text.length > 12) {
+                      alert(context, "Username maksimal 12 karakter",
                           "Gagal mendaftar!", Icons.error, Colors.red);
                     } else {
                       // Navigator.push(

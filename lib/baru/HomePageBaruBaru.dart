@@ -190,6 +190,16 @@ class _HomePageBaruBaruState extends State<HomePageBaruBaru> {
                                       width: double.infinity,
                                       height: 150.0,
                                       fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        print('Error loading image: $error');
+                                        return Image.asset(
+                                          'assets/noImage.jpg',
+                                          width: 200,
+                                          height: 200,
+                                          fit: BoxFit.contain,
+                                        );
+                                      },
                                     ) ??
                                     Image.asset("assets/noImage.jpg",
                                         width: double.infinity,

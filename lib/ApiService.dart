@@ -1122,11 +1122,10 @@ class ApiService {
       String tanggal_lahir,
       String pekerjaan,
       String jumlah_penghasilan,
-      String kegunaan_surat,
-      String foto_ktp) async {
+      String kegunaan_surat) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/insert_penghasilan_baru1.php'),
+        Uri.parse('$baseUrl/insert_penghasilan.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -1140,8 +1139,8 @@ class ApiService {
           'pekerjaan': pekerjaan,
           'alamat': Alamat,
           'jumlah_penghasilan': jumlah_penghasilan,
-          'kegunaan_surat': kegunaan_surat,
-          'foto_ktp': foto_ktp
+          'kegunaan_surat': kegunaan_surat
+          // 'foto_ktp': foto_ktp
         }),
       );
 
